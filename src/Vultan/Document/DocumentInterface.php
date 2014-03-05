@@ -4,27 +4,27 @@
  * Contains a DocumentInterface.
  */
 
-namespace Ming\Document;
+namespace Vultan\Document;
 
-use Ming\Config;
-use Ming\Ming\Database;
+use Vultan\Config;
+use Vultan\Vultan\Database;
 
 /**
  * Interface DocumentInterface
  *
- * @package Ming\Document
+ * @package Vultan\Document
  */
 interface DocumentInterface {
 
   /**
    * Static factory method.
    *
-   * @param \Ming\Config $config
-   *   A Ming Configuration object
+   * @param \Vultan\Config $config
+   *   A Vultan Configuration object
    * @param array $data
    *   (Optional) An array containing any object properties to set.
    *
-   * @return \Ming\Document\DocumentInterface
+   * @return \Vultan\Document\DocumentInterface
    *   The Document object.
    */
   public static function create(Config $config, array $data = array());
@@ -75,7 +75,7 @@ interface DocumentInterface {
    * @param string $key
    *   Property to unset.
    *
-   * @return \Ming\Document\DocumentInterface
+   * @return \Vultan\Document\DocumentInterface
    *   The Document object.
    */
   public function remove($key);
@@ -99,7 +99,7 @@ interface DocumentInterface {
    * @param mixed $value
    *   The value.
    *
-   * @return \Ming\Document\DocumentInterface
+   * @return \Vultan\Document\DocumentInterface
    *   The Document object.
    */
   public function set($key, $value);
@@ -127,7 +127,7 @@ interface DocumentInterface {
    * @param string|\MongoId $identifier
    *   A suitable MongoDB identifier.
    *
-   * @return \Ming\Document\DocumentInterface
+   * @return \Vultan\Document\DocumentInterface
    *   The Document object.
    */
   public function setIdentifier($identifier);

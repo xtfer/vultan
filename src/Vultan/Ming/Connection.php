@@ -8,16 +8,16 @@
  * @author Chris Skene chris at xtfer dot com
  */
 
-namespace Ming\Ming;
+namespace Vultan\Vultan;
 
-use Ming\Config;
-use Ming\Exception\MingException;
-use Ming\Traits\ConfigTrait;
+use Vultan\Config;
+use Vultan\Exception\VultanException;
+use Vultan\Traits\ConfigTrait;
 
 /**
  * Class Connection
  *
- * @package Drupal\ming\Ming
+ * @package Drupal\vultan\Vultan
  */
 class Connection {
 
@@ -39,10 +39,10 @@ class Connection {
    * This will not initialise a connection. For that use the static::init()
    * constructor, or call $this->connect().
    *
-   * @param \ming\Config $config
-   *   A Ming Configuration object.
+   * @param \vultan\Config $config
+   *   A Vultan Configuration object.
    *
-   * @return \Ming\Ming\Connection
+   * @return \Vultan\Vultan\Connection
    *   This connection object, with an initialised database connection.
    */
   public function __construct(Config $config) {
@@ -54,10 +54,10 @@ class Connection {
   /**
    * Connect to a mongo database.
    *
-   * @param \ming\Config $config
-   *   A Ming Configuration object.
+   * @param \vultan\Config $config
+   *   A Vultan Configuration object.
    *
-   * @return \Ming\Ming\Connection
+   * @return \Vultan\Vultan\Connection
    *   This connection object, with an initialised database connection.
    */
   static public function init(Config $config) {
@@ -74,7 +74,7 @@ class Connection {
    *
    * @todo Add Replica Set and Socket support
    *
-   * @return \Ming\Ming\Connection
+   * @return \Vultan\Vultan\Connection
    *   A PHP Mongo class
    */
   public function connect() {
@@ -159,7 +159,7 @@ class Connection {
   /**
    * Get the value for MongoClient.
    *
-   * @throws \Ming\Exception\MingException
+   * @throws \Vultan\Exception\VultanException
    * @return \MongoClient
    *   The value of MongoClient.
    */
@@ -167,7 +167,7 @@ class Connection {
 
     if (!isset($this->MongoClient) || empty($this->MongoClient)) {
 
-      throw new MingException('No MongoClient object loaded in Ming.');
+      throw new VultanException('No MongoClient object loaded in Vultan.');
     }
 
     return $this->MongoClient;
@@ -179,12 +179,12 @@ class Connection {
    * @param string $connection_string
    *   The server connection string.
    *
-   * @throws \ming\Exception\MingException
+   * @throws \vultan\Exception\VultanException
    */
   public function initialiseClient($connection_string) {
 
     if (!class_exists('MongoClient')) {
-      throw new MingException('MongoDB PHP drivers not found.');
+      throw new VultanException('MongoDB PHP drivers not found.');
     }
 
     $this->MongoClient = new \MongoClient($connection_string, $this->getConfig()->getOptions());

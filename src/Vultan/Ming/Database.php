@@ -8,17 +8,15 @@
  * @author Chris Skene chris at xtfer dot com
  */
 
-namespace Ming\Ming;
+namespace Vultan\Vultan;
 
-use Ming\Config;
-use Ming\Document\DocumentCompatibilityInterface;
-use Ming\Document\DocumentFactory;
-use Ming\Document\DocumentInterface;
-use Ming\Document\ModelledDocumentInterface;
-use Ming\Exception\MingDataException;
-use Ming\Exception\MingException;
+use Vultan\Config;
+use Vultan\Document\DocumentFactory;
+use Vultan\Document\DocumentInterface;
+use Vultan\Exception\VultanDataException;
+use Vultan\Exception\VultanException;
 
-use Ming\Traits\ConfigTrait;
+use Vultan\Traits\ConfigTrait;
 use MongoDB;
 use MongoCollection;
 use MongoCursor;
@@ -59,7 +57,7 @@ class Database {
   /**
    * Result of the last operation.
    *
-   * @var \ming\Ming\Result
+   * @var \vultan\Vultan\Result
    */
   protected $lastResult;
 
@@ -253,13 +251,13 @@ class Database {
    * @todo Error handling for return values
    *
    * @param array|object $document
-   *   Preferably a Ming Document, however we also support an array of data, and
-   *   other objects public properties will be passed, or objects can implement
-   *   the DocumentCompatibilityInterface.
+   *   Preferably a Vultan Document, however we also support an array of data,
+   *   and other objects public properties will be passed, or objects can
+   *   implement the DocumentCompatibilityInterface.
    * @param bool $safe
    *   Whether the insert should be "safe" or not.
    *
-   * @return \Ming\Ming\Result
+   * @return \Vultan\Vultan\Result
    *   A result object.
    *
    * @link http://php.net/manual/en/mongocollection.insert.php
@@ -280,13 +278,6 @@ class Database {
     if (!empty($collection)) {
       $this->useCollection($collection);
     }
-
-    if ($document instanceof ModelledDocumentInterface) {
-      $fields = $document->getModel()->getFields();
-
-
-    }
-
 
     try {
 
@@ -334,7 +325,7 @@ class Database {
    * @param DocumentInterface $document
    *   (Optional) The data passed to the write operation.
    *
-   * @return \Ming\Ming\Result
+   * @return \Vultan\Vultan\Result
    *   The Result object.
    */
   protected function processWriteResult($op, $result, DocumentInterface $document = NULL) {
@@ -419,7 +410,7 @@ class Database {
    * @param array $data
    *   The data to use
    *
-   * @throws \Ming\Exception\MingDataException
+   * @throws \Vultan\Exception\VultanDataException
    * @return array
    *   An array suitable for insertion in to Mongo
    */
@@ -429,7 +420,7 @@ class Database {
       foreach (array_keys($data) as $key) {
         if ($key == '_id') {
           unset($data[$key]);
-          throw new MingDataException('Mongo IDs can not be used in modifier operations');
+          throw new VultanDataException('Mongo IDs can not be used in modifier operations');
         }
       }
     }
@@ -475,11 +466,11 @@ class Database {
    * @param array $filter
    *   An array of keys to match on
    * @param object|array $document
-   *   Preferably a Ming Document, however we also support an array of data, and
-   *   other objects public properties will be passed, or objects can implement
-   *   the DocumentCompatibilityInterface.
+   *   Preferably a Vultan Document, however we also support an array of data,
+   *   and other objects public properties will be passed, or objects can
+   *   implement the DocumentCompatibilityInterface.
    * @param bool $partial
-   *   If TRUE, this is a partial update and Ming will only update the fields
+   *   If TRUE, this is a partial update and Vultan will only update the fields
    *   provided in $data. If FALSE, $data completely overwrites the object.
    * @param array $options
    *   This parameter is an associative array of the form
@@ -488,7 +479,7 @@ class Database {
    *
    * @see http://www.php.net/manual/en/mongocollection.update.php
    *
-   * @return \Ming\Ming\Result
+   * @return \Vultan\Vultan\Result
    *   A result object.
    *
    * @see \Mongo\Core\Database::insert()
@@ -538,16 +529,16 @@ class Database {
    * @param array $filter
    *   An array of keys to match on
    * @param object|array $document
-   *   Preferably a Ming Document, however we also support an array of data, and
-   *   other objects public properties will be passed, or objects can implement
-   *   the DocumentCompatibilityInterface.
+   *   Preferably a Vultan Document, however we also support an array of data,
+   *   and other objects public properties will be passed, or objects can
+   *   implement the DocumentCompatibilityInterface.
    * @param bool $partial
-   *   If TRUE, this is a partial update and Ming will only update the fields
+   *   If TRUE, this is a partial update and Vultan will only update the fields
    *   provided in $data. If FALSE, $data completely overwrites the object.
    * @param array $options
    *   Any other options to pass to Mongo
    *
-   * @return \Ming\Ming\Result
+   * @return \Vultan\Vultan\Result
    *   A result object.
    *
    * @see \Mongo\Core\Database::insert()
@@ -592,16 +583,16 @@ class Database {
    * @param string $identifier
    *   The ID to update.
    * @param object|array $document
-   *   Preferably a Ming Document, however we also support an array of data, and
+   *   Preferably a Vultan Document, however we also support an array of data, and
    *   other objects public properties will be passed, or objects can implement
    *   the DocumentCompatibilityInterface.
    * @param bool $partial
-   *   If TRUE, this is a partial update and Ming will only update the fields
+   *   If TRUE, this is a partial update and Vultan will only update the fields
    *   provided in $data. If FALSE, $data completely overwrites the object.
    * @param array $options
    *   Any other options to pass to Mongo
    *
-   * @return \Ming\Ming\Result
+   * @return \Vultan\Vultan\Result
    *   A result object.
    *
    * @see \Mongo\Core\Database::insert()
@@ -638,14 +629,14 @@ class Database {
    * @param array $filter
    *   A normal MongoDB filter array
    * @param object|array $document
-   *   Preferably a Ming Document, however we also support an array of data, and
-   *   other objects public properties will be passed, or objects can implement
-   *   the DocumentCompatibilityInterface.
+   *   Preferably a Vultan Document, however we also support an array of data,
+   *   and other objects public properties will be passed, or objects can
+   *   implement the DocumentCompatibilityInterface.
    * @param bool $safe
    *   If TRUE, conduct a safe insert. Note that this returns an exception on
    *   error, which you will need to catch.
    *
-   * @return \Ming\Ming\Result
+   * @return \Vultan\Vultan\Result
    *   A result object. See \Mongo\Core\Database::insert() for possible values
    *
    * @see \Mongo\Core\Database::insert()
@@ -676,7 +667,7 @@ class Database {
   /**
    * Get the value for LastResult.
    *
-   * @return \Ming\Ming\Result
+   * @return \Vultan\Vultan\Result
    *   The value of LastResult.
    */
   public function getLastResult() {
@@ -694,7 +685,7 @@ class Database {
    * @param string $collection_name
    *   The collection name.
    *
-   * @throws MingException
+   * @throws VultanException
    * @return bool|MongoCollection
    *   A MongoCollection object or FALSE.
    */
@@ -705,7 +696,7 @@ class Database {
 
     }
     if (!$db instanceof MongoDB) {
-      throw new MingException('Could not load database');
+      throw new VultanException('Could not load database');
     }
 
     $this->collection = $db->selectCollection($collection_name);
@@ -730,30 +721,26 @@ class Database {
    * @param array|object $document
    *   Convert the document data into a valid Document object.
    *
-   * @return \Ming\Document\ModelledDocumentInterface|
-   *   \Ming\Document\DocumentInterface
-   *   A Ming Document.
+   * @return \Vultan\Document\DocumentInterface
+   *   A Vultan Document.
    */
   protected function prepareDocument($document) {
 
     $values = $document;
 
-    // All of our objects MUST be valid Ming Documents.
+    // All of our objects MUST be valid Vultan Documents.
     // If this isn't, convert it to an array now, before we blow our
     // stack with a private or protected Exception.
     if (is_object($document)) {
 
-      if ($document instanceof DocumentCompatibilityInterface) {
-        $values = $document->getValues();
-      }
-      elseif (!$document instanceof DocumentInterface) {
+      if (!$document instanceof DocumentInterface) {
         $values = get_object_vars($document);
       }
     }
 
     if (is_array($values)) {
       $document = DocumentFactory::init($this->getConfig())
-        ->createDocument($document);
+        ->createDocument($values);
     }
 
     return $document;

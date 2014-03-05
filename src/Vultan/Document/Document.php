@@ -1,22 +1,22 @@
 <?php
 /**
  * @file
- * A base class for Items to be managed in and out of the Ming system.
+ * A base class for Items to be managed in and out of the Vultan system.
  */
 
-namespace Ming\Document;
+namespace Vultan\Document;
 
-use Ming\Config;
-use Ming\Ming\Database;
-use Ming\MingBuilder;
-use Ming\Traits\ConfigTrait;
+use Vultan\Config;
+use Vultan\Vultan\Database;
+use Vultan\VultanBuilder;
+use Vultan\Traits\ConfigTrait;
 
 /**
  * Class Document
  *
  * Base class for a Document
  *
- * @package Ming\Document
+ * @package Vultan\Document
  */
 class Document implements DocumentInterface {
 
@@ -46,7 +46,7 @@ class Document implements DocumentInterface {
   /**
    * The active database connection
    *
-   * @var \Ming\Ming\Database
+   * @var \Vultan\Vultan\Database
    */
   protected $database;
 
@@ -73,12 +73,12 @@ class Document implements DocumentInterface {
   /**
    * Static factory method.
    *
-   * @param \Ming\Config $config
-   *   A Ming Configuration object
+   * @param \Vultan\Config $config
+   *   A Vultan Configuration object
    * @param array $data
    *   (Optional) An array containing any object properties to set.
    *
-   * @return \Ming\Document\DocumentInterface
+   * @return \Vultan\Document\DocumentInterface
    *   The Document object.
    */
   static public function create(Config $config, array $data = array()) {
@@ -95,7 +95,7 @@ class Document implements DocumentInterface {
    * @param string|\MongoId $identifier
    *   A suitable MongoDB identifier.
    *
-   * @return \Ming\Document\DocumentInterface
+   * @return \Vultan\Document\DocumentInterface
    *   The Document object.
    */
   public function setIdentifier($identifier) {
@@ -128,7 +128,7 @@ class Document implements DocumentInterface {
    * @param mixed $value
    *   The value.
    *
-   * @return \Ming\Document\DocumentInterface
+   * @return \Vultan\Document\DocumentInterface
    *   The Document object.
    */
   public function set($key, $value) {
@@ -158,7 +158,7 @@ class Document implements DocumentInterface {
    * @param string $key
    *   Property to unset.
    *
-   * @return \Ming\Document\DocumentInterface
+   * @return \Vultan\Document\DocumentInterface
    *   The Document object.
    */
   public function remove($key) {
@@ -202,11 +202,11 @@ class Document implements DocumentInterface {
   }
 
   /**
-   * Access a Ming DB connection.
+   * Access a Vultan DB connection.
    */
   public function invokeDatabaseConnection() {
 
-    $database = MingBuilder::initAndConnect($this->getConfig())->getDatabase();
+    $database = VultanBuilder::initAndConnect($this->getConfig())->getDatabase();
     $this->setDatabase($database);
 
     return $this;
@@ -215,7 +215,7 @@ class Document implements DocumentInterface {
   /**
    * Set the value for Database.
    *
-   * @param \Ming\Ming\Database $database
+   * @param \Vultan\Vultan\Database $database
    *   The value to set.
    */
   public function setDatabase(Database $database) {

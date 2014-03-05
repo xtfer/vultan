@@ -4,15 +4,15 @@
  * Contains a factory object for building Documents.
  */
 
-namespace Ming\Document;
+namespace Vultan\Document;
 
-use Ming\Config;
-use Ming\Exception\MingModelException;
+use Vultan\Config;
+use Vultan\Exception\VultanModelException;
 
 /**
  * Class DocumentFactory
  *
- * @package Ming\Document
+ * @package Vultan\Document
  */
 class DocumentFactory {
 
@@ -36,7 +36,7 @@ class DocumentFactory {
    * @param Config $config
    *   A Config object.
    *
-   * @return \Ming\Document\DocumentFactory
+   * @return \Vultan\Document\DocumentFactory
    *   This document factory.
    */
   static public function init(Config $config) {
@@ -69,7 +69,7 @@ class DocumentFactory {
   /**
    * Set the value for Config.
    *
-   * @param \Ming\Config $config
+   * @param \Vultan\Config $config
    *   The value to set.
    */
   public function setConfig(Config $config) {
@@ -80,7 +80,7 @@ class DocumentFactory {
   /**
    * Get the value for Config.
    *
-   * @return \Ming\Config
+   * @return \Vultan\Config
    *   The value of Config.
    */
   public function getConfig() {

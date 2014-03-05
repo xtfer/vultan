@@ -4,14 +4,14 @@
  * Contains a Result object.
  */
 
-namespace Ming\Ming;
+namespace Vultan\Vultan;
 
-use Ming\Document\DocumentInterface;
+use Vultan\Document\DocumentInterface;
 
 /**
  * Class Result
  *
- * @package Drupal\ming\Ming
+ * @package Drupal\vultan\Vultan
  */
 class Result {
 
@@ -39,7 +39,7 @@ class Result {
   /**
    * The Document on which the operation was performed.
    *
-   * @var \Ming\Document\DocumentInterface
+   * @var \Vultan\Document\DocumentInterface
    */
   public $document;
 
@@ -141,7 +141,7 @@ class Result {
   /**
    * Set the Document.
    *
-   * @param \Ming\Document\DocumentInterface $data
+   * @param \Vultan\Document\DocumentInterface $data
    *   The value to set.
    */
   public function setDocument(DocumentInterface $data) {

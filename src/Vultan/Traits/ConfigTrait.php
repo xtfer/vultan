@@ -4,28 +4,28 @@
  * Contains a Trait for storing a Config object.
  */
 
-namespace Ming\Traits;
+namespace Vultan\Traits;
 
-use Ming\Config;
+use Vultan\Config;
 
 /**
  * Trait Config
  *
- * @package Ming\Traits
+ * @package Vultan\Traits
  */
 trait ConfigTrait {
 
   /**
    * config
    *
-   * @var \ming\Config
+   * @var \vultan\Config
    */
   protected $config;
 
   /**
    * Get the value for Config.
    *
-   * @return \Ming\Config
+   * @return \Vultan\Config
    *   The value of Config.
    */
   public function getConfig() {
@@ -36,7 +36,7 @@ trait ConfigTrait {
   /**
    * Set the value for Config.
    *
-   * @param \Ming\Config $config
+   * @param \Vultan\Config $config
    *   The value to set.
    */
   public function setConfig(Config $config) {

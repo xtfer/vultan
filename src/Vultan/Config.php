@@ -1,22 +1,22 @@
 <?php
 /**
  * @file
- * Defines a basic Configuration class for Ming.
+ * Defines a basic Configuration class for Vultan.
  *
  * @copyright Copyright(c) 2013 Chris Skene
  * @license GPL v2 http://www.fsf.org/licensing/licenses/gpl.html
  * @author Chris Skene chris at xtfer dot com
  */
 
-namespace Ming;
+namespace Vultan;
 
-use Ming\Model\ModelFactory;
-use Ming\Model\ModelInterface;
+use Vultan\Model\ModelFactory;
+use Vultan\Model\ModelInterface;
 
 /**
  * Class Config
  *
- * @package ming
+ * @package vultan
  */
 class Config {
 
@@ -112,7 +112,7 @@ class Config {
   static public function prepare($database_name, $host = NULL, $port = NULL, $user = NULL, $pass = NULL) {
     $config = new static();
 
-    /* @var \Ming\Config $config */
+    /* @var \Vultan\Config $config */
     if (!empty($host)) {
       $config->setHost($host);
     }
@@ -318,7 +318,7 @@ class Config {
    * @param string $model_name
    *   The model name.
    *
-   * @throws Exception\MingModelException
+   * @throws Exception\VultanModelException
    *
    * @return ModelInterface
    *   An array of model information.
@@ -355,7 +355,7 @@ class Config {
    *   following keys:
    *   - name:  (Required) Machine name of the model. Should be unique.
    *   - class:  (Optional) Document Class to use. Defaults to
-   *              \Ming\Document\ModelledDocument
+   *              \Vultan\Document\ModelledDocument
    *   - fields: (Optional) An array of field information, keyed by field name.
    *   Each field can specify the following:
    *   - label: Human readable label.

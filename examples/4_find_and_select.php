@@ -11,12 +11,12 @@
 require '../vendor/autoload.php';
 
 // Fire up the DB connection and return the DB worker object.
-$config = \Ming\Config::init();
+$config = \Vultan\Config::init();
 $config->setDb('my_database');
 
-$ming = \Ming\MingBuilder::initAndConnect($config);
+$vultan = \Vultan\VultanBuilder::initAndConnect($config);
 
-$database = $ming->getDatabase();
+$database = $vultan->getDatabase();
 
 // Choose a collection to work with.
 $database->useCollection('cars');
@@ -37,7 +37,7 @@ print '</pre>';
 // 2. Select
 //
 // The select query tool offers a more expressive syntax for building queries.
-$select = $ming->select();
+$select = $vultan->select();
 
 $other_data = $select->collection('cars')
   // Add a condition on the 'model' field.

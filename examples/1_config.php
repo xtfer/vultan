@@ -8,7 +8,7 @@
 require '../vendor/autoload.php';
 
 // Fire up the DB connection and return the DB worker object.
-$config = \Ming\Config::init();
+$config = \Vultan\Config::init();
 $config->setDb('my_database');
 
 ?>
@@ -22,9 +22,9 @@ $config->setDb('my_database');
 
 <?php
 
-$ming = \Ming\MingBuilder::init($config);
+$vultan = \Vultan\VultanBuilder::init($config);
 
 ?>
 
-<p>Full connection string: <?php print $ming->getMing()->getConnection()
+<p>Full connection string: <?php print $vultan->getVultan()->getConnection()
     ->buildConnectionString(); ?></p>

@@ -1,27 +1,27 @@
 <?php
 /**
  * @file
- * Contains a Ming Select query class.
+ * Contains a Vultan Select query class.
  */
 
-namespace Ming\Query;
+namespace Vultan\Query;
 
-use Ming\Ming\Database;
+use Vultan\Vultan\Database;
 
 /**
  * Class Select.
  *
  * The Select query class is essentially a wrapper around the
- * \ming\Mongo\Database::find() method, which breaks out the Mongo filter
+ * \vultan\Mongo\Database::find() method, which breaks out the Mongo filter
  * array syntax into an interface more closely approximating the Drupal
  * db_select() syntax.
  *
- * @package Drupal\ming\Ming
+ * @package Drupal\vultan\Vultan
  */
 class Select {
 
   /**
-   * The Ming Database connection.
+   * The Vultan Database connection.
    *
    * @var Database
    */
@@ -65,14 +65,14 @@ class Select {
   /**
    * Public constructor.
    *
-   * @param \Ming\Ming\Database $ming_db
-   *   A Ming Database handler.
+   * @param \Vultan\Vultan\Database $vultan_db
+   *   A Vultan Database handler.
    *
-   * @return \Ming\Query\Select
+   * @return \Vultan\Query\Select
    *   This Query object.
    */
-  public function __construct(Database $ming_db) {
-    $this->database = $ming_db;
+  public function __construct(Database $vultan_db) {
+    $this->database = $vultan_db;
 
     return $this;
   }
@@ -80,14 +80,14 @@ class Select {
   /**
    * Static constructor.
    *
-   * @param \Ming\Ming\Database $ming_db
-   *   A Ming Database handler.
+   * @param \Vultan\Vultan\Database $vultan_db
+   *   A Vultan Database handler.
    *
-   * @return \Ming\Query\Select
+   * @return \Vultan\Query\Select
    *   This Query object.
    */
-  static public function init(Database $ming_db) {
-    return new static($ming_db);
+  static public function init(Database $vultan_db) {
+    return new static($vultan_db);
   }
 
   /**
@@ -96,7 +96,7 @@ class Select {
    * @param string $name
    *   The collection name.
    *
-   * @return \Ming\Query\Select
+   * @return \Vultan\Query\Select
    *   This Query object.
    */
   public function collection($name) {
@@ -115,7 +115,7 @@ class Select {
    * @param string $value
    *   Value to match on.
    *
-   * @return \Ming\Query\Select
+   * @return \Vultan\Query\Select
    *   This Query object.
    */
   public function condition($key, $value) {
@@ -131,7 +131,7 @@ class Select {
    *   (optional) An array of field keys. Omitting this value will return ALL
    *   fields.
    *
-   * @return \Ming\Query\Select
+   * @return \Vultan\Query\Select
    *   This Query object.
    */
   public function fields($fields = array()) {
@@ -156,7 +156,7 @@ class Select {
    * Additionally, calling resultsAsArray() forces Mongo to run the query, so
    * it is not possible to alter the cursor once executed.
    *
-   * @return \Ming\Query\Select
+   * @return \Vultan\Query\Select
    *   This Query object.
    */
   public function resultsAsArray() {
@@ -207,7 +207,7 @@ class Select {
   /**
    * Get the value for Database.
    *
-   * @return \Ming\Ming\Database
+   * @return \Vultan\Vultan\Database
    *   The value of Database.
    */
   public function getDatabase() {

@@ -1,27 +1,26 @@
 <?php
 /**
  * @file
- * Provides a Broker for Ming.
+ * Provides a Broker for Vultan.
  *
  * @copyright Copyright(c) 2013 Chris Skene
  * @license GPL v2 http://www.fsf.org/licensing/licenses/gpl.html
  * @author Chris Skene chris at xtfer dot com
  */
 
-namespace Ming;
+namespace Vultan;
 
-use Ming\Document\DocumentFactory;
-use Ming\Ming\Connection;
-use Ming\Ming\Database;
-use Ming\Model\ModelFactory;
-use Ming\Traits\ConfigTrait;
+use Vultan\Document\DocumentFactory;
+use Vultan\Vultan\Connection;
+use Vultan\Vultan\Database;
+use Vultan\Traits\ConfigTrait;
 
 /**
  * Class Broker
  *
- * @package Ming\Ming
+ * @package Vultan\Vultan
  */
-class Ming {
+class Vultan {
 
   use ConfigTrait;
 
@@ -41,7 +40,7 @@ class Ming {
    * Constructor.
    *
    * @param Config $config
-   *   A Ming Config object.
+   *   A Vultan Config object.
    */
   public function __construct(Config $config) {
 
@@ -55,9 +54,9 @@ class Ming {
    * Static factory method.
    *
    * @param Config $config
-   *   A Ming Config object.
+   *   A Vultan Config object.
    *
-   * @return \Ming\Ming
+   * @return \Vultan\Vultan
    *   This controller, for chaining.
    */
   static public function init(Config $config) {
@@ -66,10 +65,10 @@ class Ming {
   }
 
   /**
-   * Instantiate a ming database connection.
+   * Instantiate a vultan database connection.
    *
-   * @return \Ming\Ming\Database
-   *   A Ming database object.
+   * @return \Vultan\Vultan\Database
+   *   A Vultan database object.
    */
   public function connect() {
 
@@ -103,7 +102,7 @@ class Ming {
   /**
    * Initialise the Database object.
    *
-   * @return \Ming\Ming\Database
+   * @return \Vultan\Vultan\Database
    *   A Database object.
    */
   protected function initDatabase() {
@@ -114,9 +113,9 @@ class Ming {
   }
 
   /**
-   * Get the Ming Database.
+   * Get the Vultan Database.
    *
-   * @return \Ming\Ming\Database
+   * @return \Vultan\Vultan\Database
    *   The value of Connection.
    */
   public function getDatabase() {
@@ -132,7 +131,7 @@ class Ming {
   /**
    * Set the value for Connection.
    *
-   * @param \Ming\Ming\Database $database
+   * @param \Vultan\Vultan\Database $database
    *   The Database object.
    */
   public function setDatabase(Database $database) {
@@ -143,7 +142,7 @@ class Ming {
   /**
    * Get the value for Connection.
    *
-   * @return \Ming\Ming\Connection
+   * @return \Vultan\Vultan\Connection
    *   The value of Connection.
    */
   public function getConnection() {
@@ -154,7 +153,7 @@ class Ming {
   /**
    * Set the value for Connection.
    *
-   * @param \Ming\Ming\Connection $connection
+   * @param \Vultan\Vultan\Connection $connection
    *   The value to set.
    */
   public function setConnection($connection) {
@@ -173,14 +172,14 @@ class Ming {
     return DocumentFactory::init($this->getConfig());
   }
 
-  /**
-   * Return the Model Factory service.
-   *
-   * @return ModelFactory
-   *   A ModelFactory object.
-   */
-  public function getModelFactory() {
-
-    return ModelFactory::init($this->getConfig());
-  }
+//  /**
+//   * Return the Model Factory service.
+//   *
+//   * @return ModelFactory
+//   *   A ModelFactory object.
+//   */
+//  public function getModelFactory() {
+//
+//    return ModelFactory::init($this->getConfig());
+//  }
 }

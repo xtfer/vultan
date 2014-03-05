@@ -12,12 +12,12 @@ require '../vendor/autoload.php';
  */
 
 // Fire up the DB connection and return the DB worker object.
-$config = \Ming\Config::init();
+$config = \Vultan\Config::init();
 $config->setDb('my_database');
 
-$ming = \Ming\MingBuilder::initAndConnect($config);
+$vultan = \Vultan\VultanBuilder::initAndConnect($config);
 
-$database = $ming->getDatabase();
+$database = $vultan->getDatabase();
 
 // Choose a collection to work with.
 $database->useCollection('cars');
@@ -45,7 +45,7 @@ print '<p>' . $result->successMessage() . '</p>';
 
 // This returns an array containing the status of the insert.
 // See http://php.net/manual/en/mongocollection.insert.php for possible
-// return values, but note that at some point Ming will do its own error
+// return values, but note that at some point Vultan will do its own error
 // handling.
 //
 // Start by unsetting the '_id' parameter to get a new insert.

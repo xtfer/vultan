@@ -1,0 +1,20 @@
+{
+  "name": "ming/ming",
+  "description": "A lightweight MongoDB wrapper",
+  "license": "GPLv3",
+  "authors": [
+    {
+      "name": "Christopher Skene",
+      "email": "chris@xtfer.com"
+    }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Ming": "src/",
+      "Genie": "src/genie/src"
+    }
+  },
+  "require": {
+    "mustache/mustache": "v2.5.1"
+  }
+}

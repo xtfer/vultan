@@ -1,4 +1,4 @@
-# ming
+# Vultan
 
 A MongoDB wrapper for PHP.
 
@@ -7,12 +7,12 @@ A MongoDB wrapper for PHP.
 ````php
 
 // Fire up the DB connection and return the DB worker object.
-$config = \Ming\Config::init();
+$config = \Vultan\Config::init();
 $config->setDb('my_database');
 
-$ming = \Ming\MingBuilder::initAndConnect($config);
+$Vultan = \Vultan\VultanBuilder::initAndConnect($config);
 
-$database = $ming->getDatabase();
+$database = $Vultan->getDatabase();
 
 // Choose a collection to work with.
 $database->useCollection('cars');

@@ -1,5 +1,5 @@
 {
-  "name": "ming/ming",
+  "name": "xtfer/ming",
   "description": "A lightweight MongoDB wrapper",
   "license": "GPLv3",
   "authors": [
@@ -10,11 +10,10 @@
   ],
   "autoload": {
     "psr-0": {
-      "Ming": "src/",
-      "Genie": "src/genie/src"
+      "Ming": "src/"
     }
   },
   "require": {
-    "mustache/mustache": "v2.5.1"
+    "php": ">=5.4.0"
   }
 }

@@ -10,7 +10,7 @@
 
 namespace Vultan\Vultan;
 
-use Vultan\Config\Config;
+use Vultan\Config;
 use Vultan\Exception\VultanException;
 use Vultan\Traits\ConfigTrait;
 
@@ -39,13 +39,13 @@ class Connection {
    * This will not initialise a connection. For that use the static::init()
    * constructor, or call $this->connect().
    *
-   * @param \Vultan\Config\Config $config
+   * @param \vultan\Config $config
    *   A Vultan Configuration object.
    *
    * @return \Vultan\Vultan\Connection
    *   This connection object, with an initialised database connection.
    */
-  public function __construct(Config\Config $config) {
+  public function __construct(Config $config) {
     $this->config = $config;
 
     return $this;
@@ -54,13 +54,13 @@ class Connection {
   /**
    * Connect to a mongo database.
    *
-   * @param \Vultan\Config\Config $config
+   * @param \vultan\Config $config
    *   A Vultan Configuration object.
    *
    * @return \Vultan\Vultan\Connection
    *   This connection object, with an initialised database connection.
    */
-  static public function init(Config\Config $config) {
+  static public function init(Config $config) {
     $connection = new static($config);
 
     /* @var $connection Connection */

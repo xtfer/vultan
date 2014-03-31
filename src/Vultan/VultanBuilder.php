@@ -10,7 +10,6 @@
 
 namespace Vultan;
 
-use Vultan\Config\Config;
 use Vultan\Document\DocumentFactory;
 use Vultan\Vultan;
 use Vultan\Query\Select;

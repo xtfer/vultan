@@ -6,7 +6,7 @@
 
 namespace Vultan\Document;
 
-use Vultan\Config\Config;
+use Vultan\Config;
 use Vultan\Vultan\Database;
 use Vultan\VultanBuilder;
 use Vultan\Traits\ConfigTrait;
@@ -73,7 +73,7 @@ class Document implements DocumentInterface {
   /**
    * Static factory method.
    *
-   * @param \Vultan\Config\Config $config
+   * @param \Vultan\Config $config
    *   A Vultan Configuration object
    * @param array $data
    *   (Optional) An array containing any object properties to set.
@@ -222,6 +222,8 @@ class Document implements DocumentInterface {
 
     $this->database = $database;
   }
+
+
 
   /**
    * Return the Database.

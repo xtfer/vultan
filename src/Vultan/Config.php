@@ -8,9 +8,10 @@
  * @author Chris Skene chris at xtfer dot com
  */
 
-namespace Vultan\Config;
+namespace Vultan;
 
-use Vultan\Exception;
+use Vultan\Model\ModelFactory;
+use Vultan\Model\ModelInterface;
 
 /**
  * Class Config

@@ -6,7 +6,7 @@
 
 namespace Vultan\Traits;
 
-use Vultan\Config;
+use Vultan\Config\Config;
 
 /**
  * Trait Config
@@ -18,14 +18,14 @@ trait ConfigTrait {
   /**
    * config
    *
-   * @var \vultan\Config
+   * @var \Vultan\Config\Config
    */
   protected $config;
 
   /**
    * Get the value for Config.
    *
-   * @return \Vultan\Config
+   * @return \Vultan\Config\Config
    *   The value of Config.
    */
   public function getConfig() {
@@ -36,7 +36,7 @@ trait ConfigTrait {
   /**
    * Set the value for Config.
    *
-   * @param \Vultan\Config $config
+   * @param \Vultan\Config\Config $config
    *   The value to set.
    */
   public function setConfig(Config $config) {

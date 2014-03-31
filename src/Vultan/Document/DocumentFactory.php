@@ -6,7 +6,7 @@
 
 namespace Vultan\Document;
 
-use Vultan\Config;
+use Vultan\Config\Config;
 use Vultan\Exception\VultanModelException;
 
 /**
@@ -33,7 +33,7 @@ class DocumentFactory {
   /**
    * Constructor.
    *
-   * @param Config $config
+   * @param \Vultan\Config\Config $config
    *   A Config object.
    *
    * @return \Vultan\Document\DocumentFactory
@@ -69,7 +69,7 @@ class DocumentFactory {
   /**
    * Set the value for Config.
    *
-   * @param \Vultan\Config $config
+   * @param \Vultan\Config\Config $config
    *   The value to set.
    */
   public function setConfig(Config $config) {
@@ -80,7 +80,7 @@ class DocumentFactory {
   /**
    * Get the value for Config.
    *
-   * @return \Vultan\Config
+   * @return \Vultan\Config\Config
    *   The value of Config.
    */
   public function getConfig() {

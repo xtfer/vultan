@@ -10,7 +10,7 @@
 
 namespace Vultan\Vultan;
 
-use Vultan\Config;
+use Vultan\Config\Config;
 use Vultan\Document\DocumentFactory;
 use Vultan\Document\DocumentInterface;
 use Vultan\Exception\VultanDataException;
@@ -64,7 +64,7 @@ class Database {
   /**
    * Constructor function.
    */
-  public function __construct(Config $config) {
+  public function __construct(Config\Config $config) {
     $this->config = $config;
   }
 

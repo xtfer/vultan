@@ -87,7 +87,7 @@ class Document implements DocumentInterface {
   }
 
   /**
-   * Set id.
+   * Set the identifier.
    *
    * This will check whether the provided ID is a MongoId object before setting
    * the value.
@@ -110,7 +110,7 @@ class Document implements DocumentInterface {
   }
 
   /**
-   * Get the value for Id.
+   * Get the value for the identifier.
    *
    * @return string
    *   The value of Id.
@@ -143,6 +143,9 @@ class Document implements DocumentInterface {
    *
    * @param string $key
    *   The property to return
+   *
+   * @return string
+   *   Value of the key.
    */
   public function get($key) {
 
@@ -203,6 +206,9 @@ class Document implements DocumentInterface {
 
   /**
    * Access a Vultan DB connection.
+   *
+   * @return \Vultan\Document\DocumentInterface
+   *   A Vultan Document.
    */
   public function invokeDatabaseConnection() {
 
@@ -222,8 +228,6 @@ class Document implements DocumentInterface {
 
     $this->database = $database;
   }
-
-
 
   /**
    * Return the Database.
@@ -272,10 +276,10 @@ class Document implements DocumentInterface {
   }
 
   /**
-   * Return an objects properties as an array for inserting into Mongo.
+   * Get the value for Properties.
    *
    * @return array
-   *   An array of properties.
+   *   The value of Properties.
    */
   public function getValues() {
 

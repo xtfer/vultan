@@ -165,8 +165,6 @@ class Select {
     return $this;
   }
 
-
-
   /**
    * Execute the query.
    *

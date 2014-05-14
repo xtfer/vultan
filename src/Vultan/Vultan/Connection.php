@@ -39,7 +39,7 @@ class Connection {
    * This will not initialise a connection. For that use the static::init()
    * constructor, or call $this->connect().
    *
-   * @param \vultan\Config $config
+   * @param \Vultan\Config $config
    *   A Vultan Configuration object.
    *
    * @return \Vultan\Vultan\Connection
@@ -54,7 +54,7 @@ class Connection {
   /**
    * Connect to a mongo database.
    *
-   * @param \vultan\Config $config
+   * @param \Vultan\Config $config
    *   A Vultan Configuration object.
    *
    * @return \Vultan\Vultan\Connection

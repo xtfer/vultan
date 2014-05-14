@@ -1,11 +1,11 @@
 <?php
+
 /**
  * @file
- * Contains a ModelException.
+ * Contains a VultanModelException.
  */
 
 namespace Vultan\Exception;
-
 
 /**
  * Class VultanModelException

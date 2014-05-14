@@ -33,7 +33,7 @@ class DocumentFactory {
   /**
    * Constructor.
    *
-   * @param Config $config
+   * @param \Vultan\Config\\Vultan\Config $config
    *   A Config object.
    *
    * @return \Vultan\Document\DocumentFactory
@@ -69,7 +69,7 @@ class DocumentFactory {
   /**
    * Set the value for Config.
    *
-   * @param \Vultan\Config $config
+   * @param Config $config
    *   The value to set.
    */
   public function setConfig(Config $config) {
@@ -80,7 +80,7 @@ class DocumentFactory {
   /**
    * Get the value for Config.
    *
-   * @return \Vultan\Config
+   * @return Config
    *   The value of Config.
    */
   public function getConfig() {

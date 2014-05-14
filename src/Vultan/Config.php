@@ -10,8 +10,8 @@
 
 namespace Vultan;
 
-use Vultan\Model\ModelFactory;
 use Vultan\Model\ModelInterface;
+use Vultan\Exception;
 
 /**
  * Class Config
@@ -358,7 +358,7 @@ class Config {
    * @param ModelInterface $model
    *   A Model object.
    */
-  public function setModel($model_name, ModelInterface $model) {
+  public function setModel($model_name, $model) {
 
     $this->model[$model_name] = $model;
   }

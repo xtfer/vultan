@@ -79,14 +79,28 @@ class Config {
   }
 
   /**
-   * Static constructor.
+   * Static factory.
    *
    * @return Config
-   *   This config object.
+   *   A Config object
    */
-  static public function init() {
+  public static function create() {
 
     return new static();
+  }
+
+  /**
+   * Old initialiser.
+   *
+   * @deprecated
+   * @see create()
+   *
+   * @return Config
+   *   A Config Object.
+   */
+  public static function init() {
+
+    return static::create();
   }
 
   /**
@@ -110,9 +124,9 @@ class Config {
    *   This config object.
    */
   static public function prepare($database_name, $host = NULL, $port = NULL, $user = NULL, $pass = NULL) {
-    $config = new static();
 
-    /* @var \Vultan\Config $config */
+    $config = static::create();
+
     if (!empty($host)) {
       $config->setHost($host);
     }

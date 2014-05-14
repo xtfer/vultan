@@ -8,7 +8,7 @@
 require './../../vendor/autoload.php';
 
 // Initialise config.
-$config = \Vultan\Config::init();
+$config = Vultan\Config::create();
 $config->setDatabase('my_database');
 
 $vultan = \Vultan\VultanBuilder::initAndConnect($config)->getVultan();

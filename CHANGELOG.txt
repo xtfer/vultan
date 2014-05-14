@@ -1,0 +1,5 @@
+
+Version 0.2
+-----------
+Config::setDb() is now Config::setDatabase()
+Config::init() is now Config::create()

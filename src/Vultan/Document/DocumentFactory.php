@@ -7,7 +7,6 @@
 namespace Vultan\Document;
 
 use Vultan\Config;
-use Vultan\Exception\VultanModelException;
 
 /**
  * Class DocumentFactory

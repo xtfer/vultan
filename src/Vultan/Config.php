@@ -53,7 +53,7 @@ class Config {
    *
    * @var string
    */
-  protected $db;
+  protected $database;
 
   /**
    * options
@@ -126,18 +126,20 @@ class Config {
       $config->setPass($pass);
     }
 
+    $config->setDatabase($database_name);
+
     return $config;
   }
 
   /**
    * Set the value for Db.
    *
-   * @param string $db
+   * @param string $database_name
    *   The value to set.
    */
-  public function setDb($db) {
+  public function setDatabase($database_name) {
 
-    $this->db = $db;
+    $this->database = $database_name;
   }
 
   /**
@@ -148,8 +150,8 @@ class Config {
    */
   public function getDatabaseName() {
 
-    if (isset($this->db)) {
-      return $this->db;
+    if (isset($this->database)) {
+      return $this->database;
     }
 
     return NULL;

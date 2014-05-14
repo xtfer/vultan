@@ -9,7 +9,7 @@ require '../vendor/autoload.php';
 
 // Fire up the DB connection and return the DB worker object.
 $config = \Vultan\Config::init();
-$config->setDb('my_database');
+$config->setDatabase('my_database');
 
 // 1. Simple Vultan loading
 //

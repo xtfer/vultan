@@ -119,6 +119,11 @@ interface DocumentInterface {
   public function setCollection($collection_name);
 
   /**
+   * Set default properties.
+   */
+  public function setDefaultProperties();
+
+  /**
    * Set id.
    *
    * This will check whether the provided ID is a MongoId object before setting

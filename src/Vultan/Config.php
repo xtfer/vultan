@@ -10,7 +10,6 @@
 
 namespace Vultan;
 
-use Vultan\Model\ModelInterface;
 use Vultan\Exception;
 
 /**
@@ -326,62 +325,5 @@ class Config {
     }
 
     return $default;
-  }
-
-  /**
-   * Get information about the Document Model.
-   *
-   * @param string $model_name
-   *   The model name.
-   *
-   * @throws Exception\VultanModelException
-   *
-   * @return ModelInterface
-   *   An array of model information.
-   */
-  public function getModel($model_name) {
-
-    $info = $this->modelInformation();
-
-    if (array_key_exists($model_name, $info)) {
-      return $info[$model_name];
-    }
-
-    return FALSE;
-  }
-
-  /**
-   * Set a Model.
-   *
-   * @param string $model_name
-   *   The Model name.
-   * @param ModelInterface $model
-   *   A Model object.
-   */
-  public function setModel($model_name, $model) {
-
-    $this->model[$model_name] = $model;
-  }
-
-  /**
-   * Return information about available models.
-   *
-   * @return array
-   *   An array of model information. Individual array elements can provide the
-   *   following keys:
-   *   - name:  (Required) Machine name of the model. Should be unique.
-   *   - class:  (Optional) Document Class to use. Defaults to
-   *              \Vultan\Document\ModelledDocument
-   *   - fields: (Optional) An array of field information, keyed by field name.
-   *   Each field can specify the following:
-   *   - label: Human readable label.
-   *   - type: The field type. Possible types are
-   *           http://docs.mongodb.org/manual/reference/operator/query/type/,
-   *           but not all types are supported.
-   *   - required: Require the field to have a value.
-   */
-  public function modelInformation() {
-
-    return $this->model;
   }
 }

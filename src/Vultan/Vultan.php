@@ -171,15 +171,4 @@ class Vultan {
 
     return DocumentFactory::init($this->getConfig());
   }
-
-//  /**
-//   * Return the Model Factory service.
-//   *
-//   * @return ModelFactory
-//   *   A ModelFactory object.
-//   */
-//  public function getModelFactory() {
-//
-//    return ModelFactory::init($this->getConfig());
-//  }
 }

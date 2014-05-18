@@ -123,7 +123,12 @@ class Document implements DocumentInterface {
    */
   public function getId() {
 
-    return $this->id;
+    if (isset($this->identifier)) {
+
+      return $this->identifier;
+    }
+
+    return NULL;
   }
 
   /**
@@ -361,5 +366,32 @@ class Document implements DocumentInterface {
     }
   }
 
+  /**
+   * Given a MongoID, return the ID number.
+   *
+   * @param array $data
+   *   An array containing a MongoID.
+   *
+   * @return string|bool
+   *   A string ID, or FALSE.
+   */
+  static public function extractID($data) {
+
+    $item = NULL;
+    if (is_array($data) && isset($data['_id'])) {
+      $item = (array) $data['_id'];
+    }
+    elseif (is_object($data)) {
+      $item = (array) $data;
+    }
+    else {
+      return FALSE;
+    }
+
+    if (isset($item['$id'])) {
+      return $item['$id'];
+    }
+
+    return FALSE;
   }
 }

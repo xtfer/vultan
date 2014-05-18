@@ -52,22 +52,27 @@ class Document implements DocumentInterface {
 
   /**
    * Constructor.
+   *
+   * @param Config $config
+   *   A Vultan Config object.
+   * @param array $data
+   *   (Optional) Any data to set. If this is existing Mongo data, it should
+   *   have an '_id' key containing the MongoID object or value.
+   *
+   * @return \Vultan\Document\Document
+   *   This document.
    */
   public function __construct(Config $config, array $data = array()) {
 
     $this->setConfig($config);
 
+    $this->identifier = NULL;
+
     if (!empty($data)) {
-      foreach ($data as $key => $value) {
-
-        if ($key == '_id') {
-          $this->setIdentifier($value);
-          continue;
-        }
-
-        $this->set($key, $value);
-      }
+      $this->setProperties($data);
     }
+
+    return $this;
   }
 
   /**
@@ -134,6 +139,12 @@ class Document implements DocumentInterface {
    */
   public function set($key, $value) {
 
+    if ($key == '_id') {
+      $this->setIdentifier($value);
+
+      return $this;
+    }
+
     $this->properties[$key] = $value;
 
     return $this;
@@ -149,6 +160,10 @@ class Document implements DocumentInterface {
    *   Value of the key.
    */
   public function get($key) {
+
+    if ($key == '_id') {
+      return $this->getId();
+    }
 
     if (isset($this->properties[$key])) {
 
@@ -166,6 +181,10 @@ class Document implements DocumentInterface {
    *   The Document object.
    */
   public function remove($key) {
+
+    if ($key == '_id') {
+      unset($this->identifier);
+    }
 
     if (isset($this->properties[$key])) {
       unset($this->properties[$key]);
@@ -284,6 +303,63 @@ class Document implements DocumentInterface {
    */
   public function getValues() {
 
-    return $this->properties;
+    $values = $this->properties;
+
+    $this->cleanIdentitifer();
+    if (isset($this->identifier)) {
+      $values['_id'] = $this->getId();
+    }
+
+    return $values;
+  }
+
+  /**
+   * Set the value for Properties.
+   *
+   * @param array $data
+   *   The values to set.
+   *
+   * @return Document
+   *   This class, for chaining.
+   */
+  public function setProperties(array $data) {
+
+    if (!empty($data)) {
+      foreach ($data as $key => $value) {
+
+        if ($key == '_id') {
+          $this->setIdentifier($value);
+          continue;
+        }
+
+        $this->set($key, $value);
+      }
+    }
+
+    return $this;
+  }
+
+  /**
+   * Set default properties.
+   */
+  public function setDefaultProperties() {
+
+    // Set default created/updated properties.
+    if (!isset($this->properties['time_created'])) {
+      $this->set('time_created', time());
+    }
+    $this->set('time_updated', time());
+  }
+
+  /**
+   * Clean the identifier.
+   */
+  public function cleanIdentitifer() {
+
+    if (isset($this->identifier) && empty($this->identifier)) {
+      unset($this->identifier);
+    }
+  }
+
   }
 }

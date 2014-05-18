@@ -705,8 +705,15 @@ class Database {
     }
 
     // Ensure we have a properly prepared Document.
+    // This normalises document values by converting arrays or incompatible
+    // objects into \Vultan\Document\Document.
     $document = $this->prepareDocument($document);
     $data = $document->getValues();
+
+    $mongo_id = $this->extractID($data);
+    if (!empty($mongo_id)) {
+      $filter += $this->createFilterMongoID($mongo_id);
+    }
 
     $result = $this->getCollection()
       ->update($filter, $data, $options);
@@ -795,6 +802,10 @@ class Database {
       $document = DocumentFactory::init($this->getConfig())
         ->createDocument($values);
     }
+
+    // Nix strange global ID creation.
+    // @see http://stackoverflow.com/a/10183273/225682
+    $document->cleanIdentitifer();
 
     return $document;
   }

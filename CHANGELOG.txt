@@ -3,6 +3,8 @@ Version 0.3
 -----------
 API Additions
 - Added support for Write Concerns
+- Added a DocumentCompatibilityInterface, which allows non-Document objects
+  to declare compatibility with the Vultan Document model.
 
 API Changes
 - Database::filterID() has been changed to Database::createFilterMongoID()

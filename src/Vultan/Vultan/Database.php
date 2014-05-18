@@ -11,6 +11,7 @@
 namespace Vultan\Vultan;
 
 use Vultan\Config;
+use Vultan\Document\DocumentCompatibilityInterface;
 use Vultan\Document\DocumentFactory;
 use Vultan\Document\DocumentInterface;
 use Vultan\Exception\VultanDataException;
@@ -783,12 +784,14 @@ class Database {
     // stack with a private or protected Exception.
     if (is_object($document)) {
 
-      if (!$document instanceof DocumentInterface) {
+      if (!$document instanceof DocumentInterface
+        && !$document instanceof DocumentCompatibilityInterface) {
         $values = get_object_vars($document);
       }
     }
 
     if (is_array($values)) {
+
       $document = DocumentFactory::init($this->getConfig())
         ->createDocument($values);
     }

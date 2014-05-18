@@ -1,6 +1,9 @@
 
 Version 0.3
 -----------
+API Additions
+- Added support for Write Concerns
+
 API Changes
 - Config::setDb() is now Config::setDatabase()
 - Config::init() is now Config::create()

@@ -31,6 +31,10 @@ class Database {
   const OP_UPDATE = 'update';
   const OP_UPSERT = 'upsert';
 
+  const WRITE_SAFE = 1;
+  const WRITE_UNSAFE = 0;
+  const WRITE_REPLICA_MAJORITY = 'majority';
+
   use ConfigTrait;
 
   /**
@@ -69,21 +73,44 @@ class Database {
   }
 
   /**
+   * Create a new MongoId object.
+   *
+   * @param string|null $identifier
+   *   Identifier to use. Must be 24 hexidecimal characters. If an invalid
+   *   string is passed to this constructor, the constructor will ignore it
+   *   and create a new id value.
+   *
+   * @return MongoId
+   *   A MongoId object.
+   */
+  public function createMongoIdentifier($identifier = NULL) {
+
+    $mid = new MongoId($identifier);
+
+    return $mid;
+  }
+
+  /**
    * Delete items matching a filter.
    *
    * @param array $filter
    *   A normal MongoDB filter array
-   * @param bool $safe
-   *   If TRUE, conduct a safe insert. Note that this returns an exception on
-   *   error, which you will need to catch.
+   * @param string|int $write_concern
+   *   Write concern to use. Any valid Write Concern will work. Common ones are:
+   *   - Database::WRITE_SAFE: The default. Acknowledge the write and return a
+   *     result.
+   *   - Database:WRITE_UNSAFE: Optional. Use only for "unimportant data", such
+   *     as click tracking et al.
+   *
+   * @see http://www.php.net/manual/en/mongo.writeconcerns.php
    *
    * @return mixed
    *   Result of the Remove operation.
    */
-  public function delete($filter, $safe = FALSE) {
+  public function delete($filter, $write_concern = Database::WRITE_SAFE) {
 
     return $this->getCollection()
-      ->remove($filter, array("safe" => $safe));
+      ->remove($filter, array("w" => $write_concern));
   }
 
   /**
@@ -91,19 +118,24 @@ class Database {
    *
    * @param string $identifier
    *   The ID of the item to delete
-   * @param bool $safe
-   *   If TRUE, conduct a safe insert. Note that this returns an exception on
-   *   error, which you will need to catch.
+   * @param string|int $write_concern
+   *   Write concern to use. Any valid Write Concern will work. Common ones are:
+   *   - Database::WRITE_SAFE: The default. Acknowledge the write and return a
+   *     result.
+   *   - Database:WRITE_UNSAFE: Optional. Use only for "unimportant data", such
+   *     as click tracking et al.
+   *
+   * @see http://www.php.net/manual/en/mongo.writeconcerns.php
    *
    * @return mixed
    *   Result of the Remove operation.
    */
-  public function deleteByID($identifier, $safe = FALSE) {
+  public function deleteByID($identifier, $write_concern = Database::WRITE_SAFE) {
 
     $filter = $this->filterID($identifier);
 
     return $this->getCollection()
-      ->remove($filter, array("justOne" => TRUE, "safe" => $safe));
+      ->remove($filter, array("justOne" => TRUE, "w" => $write_concern));
   }
 
   /**
@@ -254,15 +286,21 @@ class Database {
    *   Preferably a Vultan Document, however we also support an array of data,
    *   and other objects public properties will be passed, or objects can
    *   implement the DocumentCompatibilityInterface.
-   * @param bool $safe
-   *   Whether the insert should be "safe" or not.
+   * @param string|int $write_concern
+   *   Write concern to use. Any valid Write Concern will work. Common ones are:
+   *   - Database::WRITE_SAFE: The default. Acknowledge the write and return a
+   *     result.
+   *   - Database:WRITE_UNSAFE: Optional. Use only for "unimportant data", such
+   *     as click tracking et al.
+   *
+   * @see http://www.php.net/manual/en/mongo.writeconcerns.php
    *
    * @return \Vultan\Vultan\Result
    *   A result object.
    *
    * @link http://php.net/manual/en/mongocollection.insert.php
    */
-  public function insert($document, $safe = FALSE) {
+  public function insert($document, $write_concern = Database::WRITE_UNSAFE) {
 
     // @todo: Handle creation of IDs.
     // http://www.php.net/manual/en/mongocollection.insert.php#111848
@@ -281,7 +319,7 @@ class Database {
 
     try {
 
-      $options = array('w' => $safe);
+      $options = array('w' => $write_concern);
       $data = $document->getValues();
 
       $result = $this->getCollection()
@@ -628,22 +666,32 @@ class Database {
    *
    * @param array $filter
    *   A normal MongoDB filter array
-   * @param object|array $document
+   * @param DocumentInterface|object|array $document
    *   Preferably a Vultan Document, however we also support an array of data,
    *   and other objects public properties will be passed, or objects can
    *   implement the DocumentCompatibilityInterface.
-   * @param bool $safe
-   *   If TRUE, conduct a safe insert. Note that this returns an exception on
-   *   error, which you will need to catch.
+   * @param string|int $write_concern
+   *   Write concern to use. Any valid Write Concern will work. Common ones are:
+   *   - Database::WRITE_SAFE: The default. Acknowledge the write and return a
+   *     result.
+   *   - Database:WRITE_UNSAFE: Optional. Use only for "unimportant data", such
+   *     as click tracking et al.
+   *
+   * @see http://www.php.net/manual/en/mongo.writeconcerns.php
    *
    * @return \Vultan\Vultan\Result
    *   A result object. See \Mongo\Core\Database::insert() for possible values
    *
    * @see \Mongo\Core\Database::insert()
    */
-  public function upsert($filter, $document, $safe = FALSE) {
+  public function upsert($filter, $document, $write_concern = Database::WRITE_SAFE) {
 
-    $options = array("upsert" => TRUE, "multiple" => FALSE, "safe" => $safe);
+    $options = array(
+      "upsert" => TRUE,
+      // @todo: better multiple support.
+      "multiple" => FALSE,
+      "w" => $write_concern,
+    );
 
     // @todo: Handle creation of IDs.
     // http://www.php.net/manual/en/mongocollection.insert.php#111848

@@ -48,7 +48,9 @@ class Vultan {
 
     $this->setConfig($config);
 
-    $this->initConnection();
+    $connection = Connection::init($this->getConfig());
+    $this->setConnection($connection);
+
     $this->initDatabase();
   }
 
@@ -86,19 +88,6 @@ class Vultan {
     $this->getDatabase()->setDataSource($mongo_db);
 
     return $this->getDatabase();
-  }
-
-  /**
-   * Initialise the Connection object.
-   *
-   * @return Connection
-   *   A Connection object.
-   */
-  protected function initConnection() {
-
-    $connection = Connection::init($this->getConfig());
-
-    $this->setConnection($connection);
   }
 
   /**

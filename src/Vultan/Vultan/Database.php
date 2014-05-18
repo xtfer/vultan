@@ -307,7 +307,7 @@ class Database {
     // Data should not be empty. This will return an Exception, so lets just
     // catch it now.
     if (empty($document)) {
-      return $this->processWriteResult(static::OP_INSERT, FALSE);
+      return $this->processWriteResult(Database::OP_INSERT, FALSE);
     }
 
     $document = $this->prepareDocument($document);
@@ -366,11 +366,11 @@ class Database {
    * @return \Vultan\Vultan\Result
    *   The Result object.
    */
-  protected function processWriteResult($op, $result, DocumentInterface $document = NULL) {
+  protected function processWriteResult($operation, $result, DocumentInterface $document = NULL) {
 
     $this->lastResult = new Result();
 
-    $this->getLastResult()->setOperation($op);
+    $this->getLastResult()->setOperation($operation);
 
     // Results as array indicate the operation was processed with a writeConcern
     // == TRUE, and the operation is in safe mode.
@@ -529,7 +529,7 @@ class Database {
     // Data should not be empty. This will return an Exception, so lets just
     // catch it now.
     if (empty($document)) {
-      return $this->processWriteResult(static::OP_UPDATE, FALSE);
+      return $this->processWriteResult(Database::OP_UPDATE, FALSE);
     }
 
     // Ensure we have a properly prepared Document.
@@ -588,7 +588,7 @@ class Database {
     // Data should not be empty. This will return an Exception, so lets just
     // catch it now.
     if (empty($document)) {
-      return $this->processWriteResult(static::OP_UPDATE, FALSE);
+      return $this->processWriteResult(Database::OP_UPDATE, FALSE);
     }
 
     // Ensure we have a properly prepared Document.
@@ -610,7 +610,7 @@ class Database {
 
     $document->setIdentifier($this->extractID($data));
 
-    return $this->processWriteResult(static::OP_UPDATE, $result, $document);
+    return $this->processWriteResult(Database::OP_UPDATE, $result, $document);
   }
 
   /**

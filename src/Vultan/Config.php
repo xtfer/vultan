@@ -297,6 +297,10 @@ class Config {
   /**
    * Set the value for Options.
    *
+   * These options are used by the MongoClient on connection.
+   *
+   * @see http://www.php.net/manual/en/mongoclient.construct.php
+   *
    * @param string $key
    *   The Mongo connection option name.
    * @param mixed $option

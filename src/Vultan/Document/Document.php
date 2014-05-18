@@ -27,7 +27,7 @@ class Document implements DocumentInterface {
    *
    * @var string
    */
-  protected $id;
+  protected $identifier;
 
   /**
    * Properties to be written to the database
@@ -99,11 +99,12 @@ class Document implements DocumentInterface {
    *   The Document object.
    */
   public function setIdentifier($identifier) {
+
     if (is_object($identifier) && get_class($identifier) == 'MongoId') {
-      $this->id = $identifier->id;
+      $this->identifier = $identifier->id;
     }
     else {
-      $this->id = $identifier;
+      $this->identifier = $identifier;
     }
 
     return $this;

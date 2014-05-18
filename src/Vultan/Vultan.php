@@ -33,6 +33,8 @@ class Vultan {
 
   /**
    * The Database.
+   *
+   * @var Database
    */
   protected $database;
 

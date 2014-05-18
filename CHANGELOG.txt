@@ -1,5 +1,6 @@
 
-Version 0.2
+Version 0.3
 -----------
-Config::setDb() is now Config::setDatabase()
-Config::init() is now Config::create()
+API Changes
+- Config::setDb() is now Config::setDatabase()
+- Config::init() is now Config::create()

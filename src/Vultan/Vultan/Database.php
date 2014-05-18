@@ -318,7 +318,7 @@ class Database {
   /**
    * Process the result of a write operation.
    *
-   * @param string $op
+   * @param string $operation
    *   The operation.
    * @param mixed $result
    *   The result returned by the write operation.
@@ -583,9 +583,9 @@ class Database {
    * @param string $identifier
    *   The ID to update.
    * @param object|array $document
-   *   Preferably a Vultan Document, however we also support an array of data, and
-   *   other objects public properties will be passed, or objects can implement
-   *   the DocumentCompatibilityInterface.
+   *   Preferably a Vultan Document, however we also support an array of data,
+   *   and other objects public properties will be passed, or objects can
+   *   implement the DocumentCompatibilityInterface.
    * @param bool $partial
    *   If TRUE, this is a partial update and Vultan will only update the fields
    *   provided in $data. If FALSE, $data completely overwrites the object.
@@ -691,15 +691,15 @@ class Database {
    */
   public function useCollection($collection_name) {
 
-    $db = $this->getDataSource();
-    if (empty($db)) {
+    $database = $this->getDataSource();
+    if (empty($database)) {
 
     }
-    if (!$db instanceof MongoDB) {
+    if (!$database instanceof MongoDB) {
       throw new VultanException('Could not load database');
     }
 
-    $this->collection = $db->selectCollection($collection_name);
+    $this->collection = $database->selectCollection($collection_name);
 
     return $this->collection;
   }

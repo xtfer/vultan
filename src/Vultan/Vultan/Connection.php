@@ -72,8 +72,6 @@ class Connection {
   /**
    * Prepares and loads a connection from the objects settings.
    *
-   * @todo Add Replica Set and Socket support
-   *
    * @return \Vultan\Vultan\Connection
    *   A PHP Mongo class
    */

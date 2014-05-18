@@ -3,7 +3,7 @@
  * @file
  * The database connection and tools.
  *
- * @copyright Copyright(c) 2013 Chris Skene
+ * @copyright Copyright(c) 2013 - 2014 Chris Skene
  * @license GPL v2 http://www.fsf.org/licensing/licenses/gpl.html
  * @author Chris Skene chris at xtfer dot com
  */

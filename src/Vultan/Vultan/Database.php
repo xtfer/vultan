@@ -132,7 +132,7 @@ class Database {
    */
   public function deleteByID($identifier, $write_concern = Database::WRITE_SAFE) {
 
-    $filter = $this->filterID($identifier);
+    $filter = $this->createFilterMongoID($identifier);
 
     return $this->getCollection()
       ->remove($filter, array("justOne" => TRUE, "w" => $write_concern));
@@ -240,7 +240,7 @@ class Database {
    */
   public function findByID($identifier) {
 
-    $filter = $this->filterID($identifier);
+    $filter = $this->createFilterMongoID($identifier);
     $result = $this->getCollection()
       ->find($filter);
 
@@ -637,7 +637,7 @@ class Database {
    */
   public function updateByID($identifier, $document, $partial = FALSE, $options = array()) {
 
-    $filter = $this->filterID($identifier);
+    $filter = $this->createFilterMongoID($identifier);
 
     return $this->update($filter, $document, $partial, $options);
   }
@@ -645,15 +645,17 @@ class Database {
   /**
    * Shortcut to set up a filter for filtering by ID.
    *
+   * @todo: Dynamic filtering.
+   *
    * @param string $identifier
    *   An identifier.
    *
    * @return array
    *   The Mongo filter.
    */
-  public function filterID($identifier) {
+  public function createFilterMongoID($identifier) {
 
-    $mid = new MongoId($identifier);
+    $mid = $this->createMongoIdentifier($identifier);
     $filter = array('_id' => $mid);
 
     return $filter;

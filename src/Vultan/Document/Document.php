@@ -204,29 +204,33 @@ class Document implements DocumentInterface {
    * This will either create or update an existing item, using the Mongo upsert
    * functionality. It also sets time created (if new) and time updated.
    *
+   * @param string|int $safe
+   *   Whether to conduct a safe upsert or not.
+   *   - Database::WRITE_SAFE: Safe. Returns status (default)
+   *   - Database::WRITE_UNSAFE: Not safe. Does not return status.
+   *
    * @return array
    *   Result of the Upsert
    */
-  public function save() {
+  public function save($safe = Database::WRITE_UNSAFE) {
 
     // Load a database.
     $this->invokeDatabaseConnection();
     $this->getDatabase()->useCollection($this->getCollection());
+    $this->setDefaultProperties();
 
-    // Set default created/updated properties.
-    if (!isset($this->properties['time_created'])) {
-      $this->set('time_created', time());
-    }
-    $this->set('time_updated', time());
+    // @todo: Dynamic filtering in Database class.
+    $identifier = $this->getId();
+    if (!empty($identifier)) {
+      $filter = $this->getDatabase()->createFilterMongoID($identifier);
 
-    if (isset($this->id)) {
-      $filter = $this->getDatabase()->filterID($this->id);
+      return $this->getDatabase()->upsert($filter, $this, $safe);
     }
     else {
-      $filter = array();
+
+      return $this->getDatabase()->insert($this, $safe);
     }
 
-    return $this->getDatabase()->upsert($filter, $this->getValues());
   }
 
   /**

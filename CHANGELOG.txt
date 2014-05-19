@@ -4,7 +4,9 @@ Version 0.3
 API Additions
 - Added support for Write Concerns
 - Added a DocumentCompatibilityInterface, which allows non-Document objects
-  to declare compatibility with the Vultan Document model.
+  to declare compatibility with the Vultan Document model
+- If a 'collection' key is set on a Document, this will be used as the
+  Document's collection (but not set when writing data)
 
 API Changes
 - Database::filterID() has been changed to Database::createFilterMongoID()
@@ -12,4 +14,4 @@ API Changes
 - Config::init() is now Config::create()
 
 Bugfixes
-- Fixed an issue where MongoID objects would not reliably return an ID.
+- Fixed an issue where MongoID objects would not reliably return an ID

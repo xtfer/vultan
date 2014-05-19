@@ -134,6 +134,11 @@ class Document implements DocumentInterface {
   /**
    * Set a property.
    *
+   * If the following properties are provided, they will be extracted and set
+   * on the document:
+   *  '_id': will be converted to a Document ID
+   *  'collection': will be used as the document collection.
+   *
    * @param string $key
    *   The property key.
    * @param mixed $value
@@ -146,11 +151,13 @@ class Document implements DocumentInterface {
 
     if ($key == '_id') {
       $this->setIdentifier($value);
-
-      return $this;
     }
-
-    $this->properties[$key] = $value;
+    elseif ($key == 'collection') {
+      $this->setCollection($value);
+    }
+    else {
+      $this->properties[$key] = $value;
+    }
 
     return $this;
   }

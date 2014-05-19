@@ -106,7 +106,7 @@ class Document implements DocumentInterface {
   public function setIdentifier($identifier) {
 
     if (is_object($identifier) && get_class($identifier) == 'MongoId') {
-      $this->identifier = $identifier->id;
+      $this->identifier = (string) $identifier;
     }
     else {
       $this->identifier = $identifier;

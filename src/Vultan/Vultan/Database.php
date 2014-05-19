@@ -321,7 +321,7 @@ class Database {
     try {
 
       $options = array('w' => $write_concern);
-      $data = $document->getValues();
+      $data = $document->getProperties();
 
       $result = $this->getCollection()
         ->insert($data, $options);
@@ -541,7 +541,7 @@ class Database {
     $options = array('multiple' => FALSE) + $options;
 
     // Extract the values to insert.
-    $data = $document->getValues();
+    $data = $document->getProperties();
 
     // Fix partial keys.
     if (isset($partial) && $partial == TRUE) {
@@ -594,7 +594,7 @@ class Database {
 
     // Ensure we have a properly prepared Document.
     $document = $this->prepareDocument($document);
-    $data = $document->getValues();
+    $data = $document->getProperties();
 
     // Update multiple.
     $options['multiple'] = TRUE;
@@ -708,7 +708,7 @@ class Database {
     // This normalises document values by converting arrays or incompatible
     // objects into \Vultan\Document\Document.
     $document = $this->prepareDocument($document);
-    $data = $document->getValues();
+    $data = $document->getProperties();
 
     $mongo_id = $this->extractID($data);
     if (!empty($mongo_id)) {

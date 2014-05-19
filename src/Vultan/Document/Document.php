@@ -319,7 +319,7 @@ class Document implements DocumentInterface {
    * @return array
    *   The value of Properties.
    */
-  public function getValues() {
+  public function getProperties() {
 
     $values = $this->properties;
 

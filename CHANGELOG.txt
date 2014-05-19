@@ -12,6 +12,7 @@ API Changes
 - Database::filterID() has been changed to Database::createFilterMongoID()
 - Config::setDb() is now Config::setDatabase()
 - Config::init() is now Config::create()
+- Document::getValues() is now Document::getProperties(), for consistency
 
 Bugfixes
 - Fixed an issue where MongoID objects would not reliably return an ID

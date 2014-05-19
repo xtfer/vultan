@@ -67,7 +67,7 @@ interface DocumentInterface {
    * @return array
    *   An array of properties.
    */
-  public function getValues();
+  public function getProperties();
 
   /**
    * Unset a property.

@@ -343,11 +343,6 @@ class Document implements DocumentInterface {
     if (!empty($data)) {
       foreach ($data as $key => $value) {
 
-        if ($key == '_id') {
-          $this->setIdentifier($value);
-          continue;
-        }
-
         $this->set($key, $value);
       }
     }

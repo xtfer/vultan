@@ -313,10 +313,7 @@ class Database {
 
     $document = $this->prepareDocument($document);
 
-    $collection = $document->getCollection();
-    if (!empty($collection)) {
-      $this->useCollection($collection);
-    }
+    $this->useCollection($document->getCollection());
 
     try {
 
@@ -749,15 +746,21 @@ class Database {
    */
   public function useCollection($collection_name) {
 
+    if (empty($collection_name)) {
+      throw new VultanException('Could not select collection: No collection name provided.');
+    }
+
     $database = $this->getDataSource();
-    if (empty($database)) {
-
-    }
-    if (!$database instanceof MongoDB) {
-      throw new VultanException('Could not load database');
+    if (empty($database)|| !$database instanceof MongoDB) {
+      throw new VultanException('Could not select collection: No database loaded.');
     }
 
-    $this->collection = $database->selectCollection($collection_name);
+    try {
+      $this->collection = $database->selectCollection($collection_name);
+    }
+    catch (\Exception $e) {
+      throw new VultanException('Could not select collection: ' . $e->getMessage());
+    }
 
     return $this->collection;
   }

@@ -16,3 +16,5 @@ API Changes
 
 Bugfixes
 - Fixed an issue where MongoID objects would not reliably return an ID
+- Fixed an issue where an invalid or empty collection name would throw an
+  unexpected and badly explained Exception

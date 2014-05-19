@@ -785,7 +785,7 @@ class Database {
    * @return \Vultan\Document\DocumentInterface
    *   A Vultan Document.
    */
-  protected function prepareDocument($document) {
+  public function prepareDocument($document) {
 
     $values = $document;
 

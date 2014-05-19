@@ -53,6 +53,8 @@ class Document implements DocumentInterface {
   /**
    * Constructor.
    *
+   * @see setProperties()
+   *
    * @param Config $config
    *   A Vultan Config object.
    * @param array $data
@@ -363,7 +365,9 @@ class Document implements DocumentInterface {
   }
 
   /**
-   * Clean the identifier.
+   * Clean the identifier key.
+   *
+   * We never want to return an empty identifier.
    */
   public function cleanIdentitifer() {
 

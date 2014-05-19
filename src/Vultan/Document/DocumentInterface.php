@@ -136,4 +136,15 @@ interface DocumentInterface {
    *   The Document object.
    */
   public function setIdentifier($identifier);
+
+  /**
+   * Set the value for Properties.
+   *
+   * @param array $data
+   *   The values to set.
+   *
+   * @return Document
+   *   This class, for chaining.
+   */
+  public function setProperties(array $data);
 }

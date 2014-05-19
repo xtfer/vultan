@@ -32,7 +32,7 @@ class DocumentFactory {
   /**
    * Constructor.
    *
-   * @param \Vultan\Config\\Vultan\Config $config
+   * @param \Vultan\Config $config
    *   A Config object.
    *
    * @return \Vultan\Document\DocumentFactory

@@ -68,9 +68,37 @@ class Database {
 
   /**
    * Constructor function.
+   *
+   * @param Config $config
+   *   The Config object.
+   * @param \MongoDB $mongo_db
+   *   A MongoDB database.
    */
-  public function __construct(Config $config) {
+  public function __construct(Config $config, MongoDB $mongo_db) {
     $this->config = $config;
+    $this->mongoDB = $mongo_db;
+
+    // This is not necessary UNLESS this is a new database, in which case
+    // selectDB() won't actually create the database.
+    // @see http://stackoverflow.com/questions/4508529/
+    // create-a-mongodb-database-with-php
+    $this->mongoDB->listCollections();
+  }
+
+  /**
+   * Main constructor.
+   *
+   * @param Config $config
+   *   The Config object.
+   * @param \MongoDB $mongo_db
+   *   A MongoDB database.
+   *
+   * @return Database
+   *   This Database object.
+   */
+  static public function init(Config $config, MongoDB $mongo_db) {
+
+    return new static($config, $mongo_db);
   }
 
   /**

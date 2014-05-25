@@ -67,7 +67,7 @@ class VultanBuilder {
   static public function initAndConnect($config = NULL) {
     $vultan_builder = static::init($config);
 
-    $vultan_builder->getVultan()->connect();
+    $vultan_builder->getVultan();
 
     return $vultan_builder;
   }

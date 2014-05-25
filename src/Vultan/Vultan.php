@@ -16,7 +16,7 @@ use Vultan\Vultan\Database;
 use Vultan\Traits\ConfigTrait;
 
 /**
- * Class Broker
+ * Class Vultan
  *
  * @package Vultan\Vultan
  */
@@ -43,14 +43,16 @@ class Vultan {
    *
    * @param Config $config
    *   A Vultan Config object.
+   * @param Connection $connection
+   *   A Vultan Connection object.
+   * @param Database $database
+   *   A Vultan Database object.
    */
-  public function __construct(Config $config) {
+  public function __construct(Config $config, Connection $connection, Database $database) {
 
-    $this->setConfig($config);
-
-    $this->connection = Connection::init($this->getConfig());
-
-    $this->getDatabase();
+    $this->connection = $connection;
+    $this->database = $database;
+    $this->config = $config;
   }
 
   /**
@@ -64,29 +66,11 @@ class Vultan {
    */
   static public function init(Config $config) {
 
-    return new static($config);
-  }
+    $connection = Connection::init($config);
+    $mongo_db = $connection->useDatabase($config->getDatabaseName());
+    $database = Database::init($config, $mongo_db);
 
-  /**
-   * Instantiate a vultan database connection.
-   *
-   * @return \Vultan\Vultan\Database
-   *   A Vultan database object.
-   */
-  public function connect() {
-
-    $db_name = $this->getConfig()->getDatabaseName();
-    $mongo_db = $this->getConnection()->useDatabase($db_name);
-
-    // This is not necessary UNLESS this is a new database, in which case
-    // selectDB() won't actually create the database.
-    // @see http://stackoverflow.com/questions/4508529/
-    // create-a-mongodb-database-with-php
-    $mongo_db->listCollections();
-
-    $this->getDatabase()->setDataSource($mongo_db);
-
-    return $this->getDatabase();
+    return new static($config, $connection, $database);
   }
 
   /**
@@ -96,11 +80,6 @@ class Vultan {
    *   The value of Connection.
    */
   public function getDatabase() {
-
-    if (!isset($this->database) || empty($this->database)) {
-
-      $this->database = new Database($this->getConfig());
-    };
 
     return $this->database;
   }

@@ -18,10 +18,6 @@ $config->setDatabase('my_database');
 // connection or missing PHP MongoDB driver.
 $vultan = \Vultan\Vultan::init($config);
 
-// Connect to the database.
-// If the database does not exist, it will be created here.
-$vultan->connect();
-
 // Load the database object for CRUD operations.
 $database = $vultan->getDatabase();
 

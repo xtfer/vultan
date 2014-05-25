@@ -48,10 +48,9 @@ class Vultan {
 
     $this->setConfig($config);
 
-    $connection = Connection::init($this->getConfig());
-    $this->setConnection($connection);
+    $this->connection = Connection::init($this->getConfig());
 
-    $this->initDatabase();
+    $this->getDatabase();
   }
 
   /**
@@ -91,19 +90,6 @@ class Vultan {
   }
 
   /**
-   * Initialise the Database object.
-   *
-   * @return \Vultan\Vultan\Database
-   *   A Database object.
-   */
-  protected function initDatabase() {
-
-    $db = new Database($this->getConfig());
-
-    $this->setDatabase($db);
-  }
-
-  /**
    * Get the Vultan Database.
    *
    * @return \Vultan\Vultan\Database
@@ -113,21 +99,10 @@ class Vultan {
 
     if (!isset($this->database) || empty($this->database)) {
 
-      $this->initDatabase();
+      $this->database = new Database($this->getConfig());
     };
 
     return $this->database;
-  }
-
-  /**
-   * Set the value for Connection.
-   *
-   * @param \Vultan\Vultan\Database $database
-   *   The Database object.
-   */
-  public function setDatabase(Database $database) {
-
-    $this->database = $database;
   }
 
   /**
@@ -139,17 +114,6 @@ class Vultan {
   public function getConnection() {
 
     return $this->connection;
-  }
-
-  /**
-   * Set the value for Connection.
-   *
-   * @param \Vultan\Vultan\Connection $connection
-   *   The value to set.
-   */
-  public function setConnection($connection) {
-
-    $this->connection = $connection;
   }
 
   /**

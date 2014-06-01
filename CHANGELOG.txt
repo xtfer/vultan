@@ -9,14 +9,7 @@ API Additions
   Document's collection (but not set when writing data)
 
 API Changes
-- It is no longer necessary to call Vultan::connect(), as this happens
-  automatically.
-- Database::filterID() has been changed to Database::createFilterMongoID()
-- Config::setDb() is now Config::setDatabase()
-- Config::init() is now Config::create()
-- Document::getValues() is now Document::getProperties(), for consistency
+- Significant API changes. Please check the examples.
 
 Bugfixes
-- Fixed an issue where MongoID objects would not reliably return an ID
-- Fixed an issue where an invalid or empty collection name would throw an
-  unexpected and badly explained Exception
+- Multiple fixes

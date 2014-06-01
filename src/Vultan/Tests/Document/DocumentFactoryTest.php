@@ -18,7 +18,7 @@ use Vultan\Tests\TestHelpers\TestSetup;
  */
 class DocumentFactoryTest extends \PHPUnit_Framework_TestCase {
 
-  use \Vultan\Tests\TestHelpers\TestSetup;
+  use TestSetup;
 
   public function setUp() {
 
@@ -30,8 +30,6 @@ class DocumentFactoryTest extends \PHPUnit_Framework_TestCase {
     $factory = DocumentFactory::init($this->config);
     $document = $factory->createDocument();
 
-    $db = $document->getDatabase();
-
-    $this->assertEquals('Vultan\\Vultan\\Database', get_class($db));
+    $this->assertEquals('Vultan\\Document\\Document', get_class($document));
   }
 }

@@ -9,7 +9,7 @@
 namespace Vultan\Tests\TestHelpers;
 
 use Vultan\Config;
-use Vultan\VultanBuilder;
+use Vultan\Vultan;
 
 /**
  * Trait TestSetup
@@ -17,13 +17,6 @@ use Vultan\VultanBuilder;
  * @package Vultan\Tests
  */
 trait TestSetup {
-
-  /**
-   * The database variable.
-   *
-   * @var \Vultan\Vultan\Database
-   */
-  public $database;
 
   /**
    * The config variable.
@@ -35,17 +28,17 @@ trait TestSetup {
   /**
    * The vultan variable.
    *
-   * @var VultanBuilder
+   * @var Vultan
    */
-  public $vultanBuilder;
+  public $vultan;
 
   /**
    * {@inheritdoc}
    */
   public function preFlight() {
 
-    $this->config = Config::create()->prepare('test');
-
-    $this->vultanBuilder = VultanBuilder::init($this->config);
+    $this->vultan = Vultan::connect()
+      ->useDatabase('test')
+      ->useCollection('test');
   }
 }

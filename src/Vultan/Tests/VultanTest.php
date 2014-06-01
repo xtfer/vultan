@@ -9,6 +9,7 @@
 namespace Vultan\Tests;
 
 use Vultan\Config;
+use Vultan\Tests\TestHelpers\TestSetup;
 use Vultan\Vultan;
 use Vultan\VultanBuilder;
 
@@ -19,22 +20,30 @@ use Vultan\VultanBuilder;
  */
 class VultanTest extends \PHPUnit_Framework_TestCase {
 
+  use TestSetup;
+
   /**
-   * Basic initialistion tests.
+   * Constructor.
    */
-  public function test() {
+  public function setup() {
+    $this->preFlight();
+  }
 
-    $config = Config::create()->prepare('test');
+  /**
+   * Basic initialisation tests.
+   */
+  public function testInit() {
 
-    $vultan = Vultan::init($config);
-
-    $database = $vultan->getDatabase();
+    $database = $this->vultan->getDatabase();
     $this->assertEquals('Vultan\\Vultan\\Database', get_class($database));
 
-    $connection = $vultan->getConnection();
+    $connection = $this->vultan->getConnection();
     $this->assertEquals('Vultan\\Vultan\\Connection', get_class($connection));
 
-    $document_factory = $vultan->getDocumentFactory();
+    $collection = $this->vultan->getCollection();
+    $this->assertEquals('Vultan\\Vultan\\Collection', get_class($collection));
+
+    $document_factory = $this->vultan->getDocumentFactory();
     $this->assertEquals('Vultan\\Document\\DocumentFactory', get_class($document_factory));
 
   }

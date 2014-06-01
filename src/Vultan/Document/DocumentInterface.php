@@ -46,14 +46,6 @@ interface DocumentInterface {
   public function getCollection();
 
   /**
-   * Return the Database.
-   *
-   * @return Database
-   *   A Database object.
-   */
-  public function getDatabase();
-
-  /**
    * Get the value for Id.
    *
    * @return string

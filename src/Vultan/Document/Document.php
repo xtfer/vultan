@@ -7,9 +7,10 @@
 namespace Vultan\Document;
 
 use Vultan\Config;
+use Vultan\Query\BaseQuery;
 use Vultan\Vultan\Database;
-use Vultan\VultanBuilder;
 use Vultan\Traits\ConfigTrait;
+use Vultan\Vultan;
 
 /**
  * Class Document
@@ -44,11 +45,11 @@ class Document implements DocumentInterface {
   protected $collection;
 
   /**
-   * The active database connection
+   * The vultan variable.
    *
-   * @var \Vultan\Vultan\Database
+   * @var Vultan
    */
-  protected $database;
+  protected $vultan;
 
   /**
    * Constructor.
@@ -221,23 +222,23 @@ class Document implements DocumentInterface {
    * @return array
    *   Result of the Upsert
    */
-  public function save($safe = Database::WRITE_UNSAFE) {
+  public function save($safe = BaseQuery::WRITE_UNSAFE) {
 
     // Load a database.
     $this->invokeDatabaseConnection();
-    $this->getDatabase()->useCollection($this->getCollection());
+    $this->vultan->useCollection($this->collection);
+
+    // Set defaults.
     $this->setDefaultProperties();
 
-    // @todo: Dynamic filtering in Database class.
     $identifier = $this->getId();
     if (!empty($identifier)) {
-      $filter = $this->getDatabase()->createFilterMongoID($identifier);
 
-      return $this->getDatabase()->upsert($filter, $this, $safe);
+      return $this->vultan->upsert(array(), $this, $safe);
     }
     else {
 
-      return $this->getDatabase()->insert($this, $safe);
+      return $this->vultan->insert($this, $safe);
     }
 
   }
@@ -250,32 +251,9 @@ class Document implements DocumentInterface {
    */
   public function invokeDatabaseConnection() {
 
-    $database = VultanBuilder::initAndConnect($this->getConfig())->getDatabase();
-    $this->setDatabase($database);
+    $this->vultan = Vultan::init($this->config);
 
     return $this;
-  }
-
-  /**
-   * Set the value for Database.
-   *
-   * @param \Vultan\Vultan\Database $database
-   *   The value to set.
-   */
-  public function setDatabase(Database $database) {
-
-    $this->database = $database;
-  }
-
-  /**
-   * Return the Database.
-   *
-   * @return Database
-   *   A Database object.
-   */
-  public function getDatabase() {
-
-    return $this->database;
   }
 
   /**

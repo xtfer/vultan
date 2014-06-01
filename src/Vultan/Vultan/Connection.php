@@ -11,7 +11,7 @@
 namespace Vultan\Vultan;
 
 use Vultan\Config;
-use Vultan\Exception\VultanException;
+use Vultan\Exception\VultanTransportException;
 use Vultan\Traits\ConfigTrait;
 
 /**
@@ -165,7 +165,7 @@ class Connection {
 
     if (!isset($this->MongoClient) || empty($this->MongoClient)) {
 
-      throw new VultanException('No MongoClient object loaded in Vultan.');
+      throw new VultanTransportException('No MongoClient object loaded in Vultan.');
     }
 
     return $this->MongoClient;
@@ -182,9 +182,15 @@ class Connection {
   public function initialiseClient($connection_string) {
 
     if (!class_exists('MongoClient')) {
-      throw new VultanException('MongoDB PHP drivers not found.');
+      throw new VultanTransportException('MongoDB PHP drivers not found.');
     }
 
-    $this->MongoClient = new \MongoClient($connection_string, $this->getConfig()->getOptions());
+    try {
+      $this->MongoClient = new \MongoClient($connection_string, $this->getConfig()
+          ->getOptions());
+    }
+    catch(\MongoConnectionException $e) {
+      throw new VultanTransportException('Could not connect to Mongo: ' . $e->getMessage());
+    }
   }
 }

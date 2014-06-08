@@ -149,10 +149,10 @@ class Result {
   /**
    * Set the Document.
    *
-   * @param \Vultan\Document\DocumentInterface $data
+   * @param \Vultan\Document\DocumentInterface|array $data
    *   The value to set.
    */
-  public function setDocument(DocumentInterface $data) {
+  public function setDocument($data) {
 
     $this->document = $data;
   }

@@ -56,4 +56,13 @@ class Update extends WriteQuery implements QueryImplementationInterface {
     $this->result = $this->collection
       ->update($data, $this->filter, $this->options);
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postExecute() {
+
+    // Can we get the updated record?
+    $this->document = $this->collection->getCollection()->findOne();
+  }
 }

@@ -588,12 +588,19 @@ abstract class BaseQuery implements QueryBaseInterface {
         $this->getLastResult()->setResult($this->result);
       }
     }
-    else {
+    elseif (is_bool($this->result)) {
+      $this->getLastResult()->setSuccess($this->result);
       $this->getLastResult()->setResult($this->result);
     }
 
     if (!empty($this->document)) {
-      $this->getLastResult()->setId($this->document->getId());
+      if (is_object($this->document) && $this->document instanceof DocumentInterface) {
+        $id = $this->document->getId();
+      }
+      else {
+        isset($this->document['id']) ? $id = $this->document['id'] : $id = NULL;
+      }
+      $this->getLastResult()->setId($id);
       $this->getLastResult()->setDocument($this->document);
     }
 

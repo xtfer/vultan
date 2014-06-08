@@ -7,6 +7,7 @@
 
 namespace Vultan\Query\Types;
 
+use Vultan\Document\DocumentInterface;
 use Vultan\Query\BaseQuery;
 use Vultan\Vultan\Result;
 
@@ -56,7 +57,13 @@ abstract class WriteQuery extends BaseQuery {
     }
 
     if (!empty($this->document)) {
-      $this->getLastResult()->setId($this->document->getId());
+      if (is_object($this->document) && $this->document instanceof DocumentInterface) {
+        $id = $this->document->getId();
+      }
+      else {
+        isset($this->document['id']) ? $id = $this->document['id'] : $id = NULL;
+      }
+      $this->getLastResult()->setId($id);
       $this->getLastResult()->setDocument($this->document);
     }
 

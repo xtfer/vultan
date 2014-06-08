@@ -182,24 +182,7 @@ class Document implements DocumentInterface {
    */
   public function link($key, $document) {
 
-    if (is_string($document)) {
-      // This is a MongoID string.
-      $target_id = $document;
-    }
-    elseif (get_class($document) == '\MongoID') {
-      // This is a MondoID object.
-      $target_id = (string) $document;
-    }
-    elseif (get_class($document) == '\Vultan\Document\DocumentInterface') {
-      // This is a document.
-      /* @var DocumentInterface $document */
-      $target_id = $document->getId();
-    }
-    else {
-      throw new VultanException('No valid Mongo ID found on linked document');
-    }
-
-    $link = new Link($key, $target_id);
+    $link = new Link($key, $document);
     $this->set($key, $link);
 
     return $this;

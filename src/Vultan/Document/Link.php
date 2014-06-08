@@ -7,6 +7,8 @@
 
 namespace Vultan\Document;
 
+use Vultan\Exception\VultanException;
+
 /**
  * Class Link
  *
@@ -22,12 +24,29 @@ class Link {
    *
    * @param string $name
    *   Name of the link.
-   * @param mixed $target
+   * @param mixed $document
    *   The target for this link.
+   *
+   * @throws \Vultan\Exception\VultanException
    */
-  public function __construct($name, $target) {
+  public function __construct($name, $document) {
     $this->name = $name;
-    $this->target = $target;
+    if (is_string($document)) {
+      // This is a MongoID string.
+      $this->target = $document;
+    }
+    elseif (get_class($document) == '\MongoID') {
+      // This is a MondoID object.
+      $this->target = (string) $document;
+    }
+    elseif ($document instanceof DocumentInterface || $document instanceof DocumentCompatibilityInterface) {
+      // This is a document.
+      /* @var DocumentInterface $document */
+      $this->target = $document->getId();
+    }
+    else {
+      throw new VultanException('No valid Mongo ID found on linked document');
+    }
   }
 
   /**

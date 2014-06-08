@@ -7,6 +7,7 @@
 namespace Vultan\Document;
 
 use Vultan\Config;
+use Vultan\Exception\VultanException;
 use Vultan\Query\BaseQuery;
 use Vultan\Vultan\Database;
 use Vultan\Traits\ConfigTrait;
@@ -161,6 +162,45 @@ class Document implements DocumentInterface {
     else {
       $this->properties[$key] = $value;
     }
+
+    return $this;
+  }
+
+  /**
+   * Link a document to another document or Mongo data item.
+   *
+   * @param string $key
+   *   The property key for this item.
+   * @param string|\MongoID|DocumentInterface $document
+   *   The item to link. Cam be either the ID of the Mongo object, a MongoID, or
+   *   a Document.
+   *
+   * @throws \Vultan\Exception\VultanException
+   *
+   * @return \Vultan\Document\DocumentInterface
+   *   The Document object.
+   */
+  public function link($key, $document) {
+
+    if (is_string($document)) {
+      // This is a MongoID string.
+      $target_id = $document;
+    }
+    elseif (get_class($document) == '\MongoID') {
+      // This is a MondoID object.
+      $target_id = (string) $document;
+    }
+    elseif (get_class($document) == '\Vultan\Document\DocumentInterface') {
+      // This is a document.
+      /* @var DocumentInterface $document */
+      $target_id = $document->getId();
+    }
+    else {
+      throw new VultanException('No valid Mongo ID found on linked document');
+    }
+
+    $link = new Link($key, $target_id);
+    $this->set($key, $link);
 
     return $this;
   }

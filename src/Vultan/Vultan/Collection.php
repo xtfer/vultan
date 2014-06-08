@@ -8,6 +8,7 @@
 namespace Vultan\Vultan;
 
 use Vultan\Config;
+use Vultan\Document\Link;
 use Vultan\Exception\VultanIndexException;
 use Vultan\Traits\ConfigTrait;
 
@@ -54,6 +55,8 @@ class Collection {
    */
   public function insert(array $data, array $options = array()) {
 
+    $this->prepareWriteData($data);
+
     return $this->collection->insert($data, $options);
   }
 
@@ -72,6 +75,7 @@ class Collection {
    */
   public function update(array $data, array $filter = array(), array $options = array()) {
 
+    $this->prepareWriteData($data);
     return $this->collection->update($filter, $data, $options);
   }
 
@@ -140,6 +144,21 @@ class Collection {
     }
     catch (\MongoException $e) {
       throw new VultanIndexException('Unable to create index: ' . $e->getMessage());
+    }
+  }
+
+  /**
+   * Do any data prep tasks, such as converting Links to DBRefs.
+   *
+   * @param array $data
+   *   The array of data.
+   */
+  protected function prepareWriteData(array &$data) {
+
+    foreach ($data as $key => $value) {
+      if (is_object($value) && $value instanceof Link) {
+        $data[$key] = $this->collection->createDBRef($value->getTarget());
+      }
     }
   }
 }

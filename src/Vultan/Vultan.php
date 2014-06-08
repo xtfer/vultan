@@ -482,13 +482,13 @@ class Vultan {
    *
    * For updating or creating an object if it does not already exist
    *
-   * @param array $filter
-   *   A normal MongoDB filter array
    * @param DocumentInterface|object|array $document
    *   Preferably a Vultan Document, however we also support an array of data,
    *   and other objects public properties will be passed, or objects can
    *   implement the DocumentCompatibilityInterface.
-   * @param string|int $write_concern
+   * @param array $filter
+   *   A normal MongoDB filter array
+   * @param int|string $write_concern
    *   Write concern to use. Any valid Write Concern will work. Common ones are:
    *   - Database::WRITE_SAFE: The default. Acknowledge the write and return a
    *     result.
@@ -504,7 +504,7 @@ class Vultan {
    *
    * @see \Mongo\Core\Database::insert()
    */
-  public function upsert($filter, $document, $write_concern = BaseQuery::WRITE_SAFE, $options = array()) {
+  public function upsert($document = NULL, $filter = array(), $write_concern = BaseQuery::WRITE_SAFE, $options = array()) {
 
     $query = Update::create($this->config, $this->collection);
 

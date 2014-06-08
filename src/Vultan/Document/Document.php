@@ -234,7 +234,7 @@ class Document implements DocumentInterface {
     $identifier = $this->getId();
     if (!empty($identifier)) {
 
-      return $this->vultan->upsert(array(), $this, $safe);
+      return $this->vultan->upsert($this, array(), $safe);
     }
     else {
 

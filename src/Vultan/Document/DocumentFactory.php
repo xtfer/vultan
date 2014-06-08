@@ -86,6 +86,10 @@ class DocumentFactory {
       ) {
         $values = get_object_vars($document);
       }
+
+      if ($document instanceof DocumentCompatibilityInterface) {
+        $values = $document->getValues();
+      }
     }
 
     if (is_array($values)) {

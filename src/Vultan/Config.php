@@ -156,6 +156,19 @@ class Config {
   }
 
   /**
+   * Alias of setDatabase().
+   *
+   * @param string $database_name
+   *   The value to set.
+   *
+   * @deprecated
+   */
+  public function setName($database_name) {
+
+    $this->setDatabase($database_name);
+  }
+
+  /**
    * Get the value for Db.
    *
    * @return string

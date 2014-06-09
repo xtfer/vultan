@@ -3,15 +3,14 @@
  * @file
  * Defines a basic Configuration class for Vultan.
  *
- * @copyright Copyright(c) 2013 Chris Skene
+ * @copyright Copyright(c) 2013 - 2014 Chris Skene
  * @license GPL v2 http://www.fsf.org/licensing/licenses/gpl.html
  * @author Chris Skene chris at xtfer dot com
  */
 
 namespace Vultan;
 
-use Vultan\Model\ModelFactory;
-use Vultan\Model\ModelInterface;
+use Vultan\Exception;
 
 /**
  * Class Config
@@ -53,7 +52,7 @@ class Config {
    *
    * @var string
    */
-  protected $db;
+  protected $database;
 
   /**
    * options
@@ -79,14 +78,28 @@ class Config {
   }
 
   /**
-   * Static constructor.
+   * Static factory.
    *
    * @return Config
-   *   This config object.
+   *   A Config object
    */
-  static public function init() {
+  public static function create() {
 
     return new static();
+  }
+
+  /**
+   * Old initialiser.
+   *
+   * @deprecated
+   * @see create()
+   *
+   * @return Config
+   *   A Config Object.
+   */
+  public static function init() {
+
+    return static::create();
   }
 
   /**
@@ -110,9 +123,9 @@ class Config {
    *   This config object.
    */
   static public function prepare($database_name, $host = NULL, $port = NULL, $user = NULL, $pass = NULL) {
-    $config = new static();
 
-    /* @var \Vultan\Config $config */
+    $config = static::create();
+
     if (!empty($host)) {
       $config->setHost($host);
     }
@@ -126,18 +139,33 @@ class Config {
       $config->setPass($pass);
     }
 
+    $config->setDatabase($database_name);
+
     return $config;
   }
 
   /**
    * Set the value for Db.
    *
-   * @param string $db
+   * @param string $database_name
    *   The value to set.
    */
-  public function setDb($db) {
+  public function setDatabase($database_name) {
 
-    $this->db = $db;
+    $this->database = $database_name;
+  }
+
+  /**
+   * Alias of setDatabase().
+   *
+   * @param string $database_name
+   *   The value to set.
+   *
+   * @deprecated
+   */
+  public function setName($database_name) {
+
+    $this->setDatabase($database_name);
   }
 
   /**
@@ -148,8 +176,8 @@ class Config {
    */
   public function getDatabaseName() {
 
-    if (isset($this->db)) {
-      return $this->db;
+    if (isset($this->database)) {
+      return $this->database;
     }
 
     return NULL;
@@ -282,6 +310,10 @@ class Config {
   /**
    * Set the value for Options.
    *
+   * These options are used by the MongoClient on connection.
+   *
+   * @see http://www.php.net/manual/en/mongoclient.construct.php
+   *
    * @param string $key
    *   The Mongo connection option name.
    * @param mixed $option
@@ -310,62 +342,5 @@ class Config {
     }
 
     return $default;
-  }
-
-  /**
-   * Get information about the Document Model.
-   *
-   * @param string $model_name
-   *   The model name.
-   *
-   * @throws Exception\VultanModelException
-   *
-   * @return ModelInterface
-   *   An array of model information.
-   */
-  public function getModel($model_name) {
-
-    $info = $this->modelInformation();
-
-    if (array_key_exists($model_name, $info)) {
-      return $info[$model_name];
-    }
-
-    return FALSE;
-  }
-
-  /**
-   * Set a Model.
-   *
-   * @param string $model_name
-   *   The Model name.
-   * @param ModelInterface $model
-   *   A Model object.
-   */
-  public function setModel($model_name, ModelInterface $model) {
-
-    $this->model[$model_name] = $model;
-  }
-
-  /**
-   * Return information about available models.
-   *
-   * @return array
-   *   An array of model information. Individual array elements can provide the
-   *   following keys:
-   *   - name:  (Required) Machine name of the model. Should be unique.
-   *   - class:  (Optional) Document Class to use. Defaults to
-   *              \Vultan\Document\ModelledDocument
-   *   - fields: (Optional) An array of field information, keyed by field name.
-   *   Each field can specify the following:
-   *   - label: Human readable label.
-   *   - type: The field type. Possible types are
-   *           http://docs.mongodb.org/manual/reference/operator/query/type/,
-   *           but not all types are supported.
-   *   - required: Require the field to have a value.
-   */
-  public function modelInformation() {
-
-    return $this->model;
   }
 }

@@ -7,6 +7,7 @@
 namespace Vultan\Vultan;
 
 use Vultan\Document\DocumentInterface;
+use MongoCursor;
 
 /**
  * Class Result
@@ -20,7 +21,7 @@ class Result {
    *
    * @var array
    */
-  public $result;
+  public $results;
 
   /**
    * success
@@ -58,6 +59,13 @@ class Result {
   public $operation;
 
   /**
+   * The message variable.
+   *
+   * @var string
+   */
+  public $message;
+
+  /**
    * Set the value for Id.
    *
    * @param bool|string $id
@@ -92,20 +100,20 @@ class Result {
    */
   public function setResult($result) {
 
-    $this->result = $result;
+    $this->results = $result;
   }
 
   /**
    * Get the value for Result.
    *
-   * @return array
+   * @return array|MongoCursor
    *   The value of Result.
    */
   public function getResult() {
 
-    if (isset($this->result)) {
+    if (isset($this->results)) {
 
-      return $this->result;
+      return $this->results;
     }
 
     return array();
@@ -141,10 +149,10 @@ class Result {
   /**
    * Set the Document.
    *
-   * @param \Vultan\Document\DocumentInterface $data
+   * @param \Vultan\Document\DocumentInterface|array $data
    *   The value to set.
    */
-  public function setDocument(DocumentInterface $data) {
+  public function setDocument($data) {
 
     $this->document = $data;
   }
@@ -218,11 +226,14 @@ class Result {
    * @return string
    *   The message.
    */
-  public function successMessage() {
+  public function getMessage() {
 
     if ($this->getSuccess() == TRUE) {
 
       return 'Successfully ' . $this->changeOperationTense($this->getOperation()) . ' document with ID: ' . $this->getId();
+    }
+    else {
+      return 'Failed to ' . $this->getOperation() . ' document with ID: ' . $this->getId();
     }
   }
 
@@ -253,4 +264,17 @@ class Result {
     }
   }
 
+  /**
+   * Determine if there is more than one result for an operation.
+   *
+   * @return bool
+   *   TRUE if there is more than one result.
+   */
+  public function hasManyResults() {
+    if (count($this->results) > 1) {
+      return TRUE;
+    }
+
+    return FALSE;
+  }
 }

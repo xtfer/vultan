@@ -11,22 +11,21 @@ require '../vendor/autoload.php';
  * Setup
  */
 
-// Fire up the DB connection and return the DB worker object.
-$config = \Vultan\Config::init();
-$config->setDb('my_database');
+// Using the connect() method without arguments returns a connection to the
+// default MongoDB on localhost.
+$vultan = \Vultan\Vultan::connect();
 
-$vultan = \Vultan\VultanBuilder::initAndConnect($config);
-
-$database = $vultan->getDatabase();
+// Choose a database.
+$vultan->useDatabase('cars');
 
 // Choose a collection to work with.
-$database->useCollection('cars');
+$vultan->useCollection('marques');
 
 // Prepare some data.
 $data = array(
-  'marque' => 'Rolls Royce',
-  'model' => 'Silver Shadow',
-  'year' => '1975',
+  'name' => 'Rolls Royce',
+  'founded' => '1906',
+  'type' => 'manufacturer',
 );
 
 /*
@@ -34,10 +33,11 @@ $data = array(
  */
 
 // Insert some data.
-$result = $database->insert($data);
+$result = $vultan->insert($data)->execute();
 
 // Print a useful message.
-print '<p>' . $result->successMessage() . '</p>';
+print '<h2>First insert result:</h2>';
+print '<p>' . $result->getMessage() . '</p>';
 
 /*
  * Insert some data in a 'safe' way.
@@ -48,11 +48,16 @@ print '<p>' . $result->successMessage() . '</p>';
 // return values, but note that at some point Vultan will do its own error
 // handling.
 //
-// Start by unsetting the '_id' parameter to get a new insert.
-unset($data['_id']);
+// Prepare some data.
+$data = array(
+  'name' => 'Mercedes Benz',
+  'founded' => '1926',
+  'type' => 'manufacturer',
+);
 
 // This will add a second, new item with the same details.
-$result = $database->insert($data, TRUE);
+$result = $vultan->insert($data, \Vultan\Query\BaseQuery::WRITE_SAFE)->execute();
 
 // Print a useful message.
-print '<p>' . $result->successMessage() . '</p>';
+print '<h2>Second insert result:</h2>';
+print '<p>' . $result->getMessage() . '</p>';

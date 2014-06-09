@@ -3,7 +3,7 @@
  * @file
  * The Connection class
  *
- * @copyright Copyright(c) 2013 Chris Skene
+ * @copyright Copyright(c) 2013 - 2014 Chris Skene
  * @license GPL v2 http://www.fsf.org/licensing/licenses/gpl.html
  * @author Chris Skene chris at xtfer dot com
  */
@@ -11,7 +11,7 @@
 namespace Vultan\Vultan;
 
 use Vultan\Config;
-use Vultan\Exception\VultanException;
+use Vultan\Exception\VultanTransportException;
 use Vultan\Traits\ConfigTrait;
 
 /**
@@ -39,7 +39,7 @@ class Connection {
    * This will not initialise a connection. For that use the static::init()
    * constructor, or call $this->connect().
    *
-   * @param \vultan\Config $config
+   * @param \Vultan\Config $config
    *   A Vultan Configuration object.
    *
    * @return \Vultan\Vultan\Connection
@@ -54,7 +54,7 @@ class Connection {
   /**
    * Connect to a mongo database.
    *
-   * @param \vultan\Config $config
+   * @param \Vultan\Config $config
    *   A Vultan Configuration object.
    *
    * @return \Vultan\Vultan\Connection
@@ -71,8 +71,6 @@ class Connection {
 
   /**
    * Prepares and loads a connection from the objects settings.
-   *
-   * @todo Add Replica Set and Socket support
    *
    * @return \Vultan\Vultan\Connection
    *   A PHP Mongo class
@@ -167,7 +165,7 @@ class Connection {
 
     if (!isset($this->MongoClient) || empty($this->MongoClient)) {
 
-      throw new VultanException('No MongoClient object loaded in Vultan.');
+      throw new VultanTransportException('No MongoClient object loaded in Vultan.');
     }
 
     return $this->MongoClient;
@@ -184,9 +182,15 @@ class Connection {
   public function initialiseClient($connection_string) {
 
     if (!class_exists('MongoClient')) {
-      throw new VultanException('MongoDB PHP drivers not found.');
+      throw new VultanTransportException('MongoDB PHP drivers not found.');
     }
 
-    $this->MongoClient = new \MongoClient($connection_string, $this->getConfig()->getOptions());
+    try {
+      $this->MongoClient = new \MongoClient($connection_string, $this->getConfig()
+          ->getOptions());
+    }
+    catch(\MongoConnectionException $e) {
+      throw new VultanTransportException('Could not connect to Mongo: ' . $e->getMessage());
+    }
   }
 }

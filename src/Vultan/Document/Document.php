@@ -7,9 +7,11 @@
 namespace Vultan\Document;
 
 use Vultan\Config;
+use Vultan\Exception\VultanException;
+use Vultan\Query\BaseQuery;
 use Vultan\Vultan\Database;
-use Vultan\VultanBuilder;
 use Vultan\Traits\ConfigTrait;
+use Vultan\Vultan;
 
 /**
  * Class Document
@@ -27,7 +29,7 @@ class Document implements DocumentInterface {
    *
    * @var string
    */
-  protected $id;
+  protected $identifier;
 
   /**
    * Properties to be written to the database
@@ -44,30 +46,37 @@ class Document implements DocumentInterface {
   protected $collection;
 
   /**
-   * The active database connection
+   * The vultan variable.
    *
-   * @var \Vultan\Vultan\Database
+   * @var Vultan
    */
-  protected $database;
+  protected $vultan;
 
   /**
    * Constructor.
+   *
+   * @see setProperties()
+   *
+   * @param Config $config
+   *   A Vultan Config object.
+   * @param array $data
+   *   (Optional) Any data to set. If this is existing Mongo data, it should
+   *   have an '_id' key containing the MongoID object or value.
+   *
+   * @return \Vultan\Document\Document
+   *   This document.
    */
   public function __construct(Config $config, array $data = array()) {
 
     $this->setConfig($config);
 
+    $this->identifier = NULL;
+
     if (!empty($data)) {
-      foreach ($data as $key => $value) {
-
-        if ($key == '_id') {
-          $this->setIdentifier($value);
-          continue;
-        }
-
-        $this->set($key, $value);
-      }
+      $this->setProperties($data);
     }
+
+    return $this;
   }
 
   /**
@@ -87,7 +96,7 @@ class Document implements DocumentInterface {
   }
 
   /**
-   * Set id.
+   * Set the identifier.
    *
    * This will check whether the provided ID is a MongoId object before setting
    * the value.
@@ -99,29 +108,40 @@ class Document implements DocumentInterface {
    *   The Document object.
    */
   public function setIdentifier($identifier) {
+
     if (is_object($identifier) && get_class($identifier) == 'MongoId') {
-      $this->id = $identifier->id;
+      $this->identifier = (string) $identifier;
     }
     else {
-      $this->id = $identifier;
+      $this->identifier = $identifier;
     }
 
     return $this;
   }
 
   /**
-   * Get the value for Id.
+   * Get the value for the identifier.
    *
    * @return string
    *   The value of Id.
    */
   public function getId() {
 
-    return $this->id;
+    if (isset($this->identifier)) {
+
+      return $this->identifier;
+    }
+
+    return NULL;
   }
 
   /**
    * Set a property.
+   *
+   * If the following properties are provided, they will be extracted and set
+   * on the document:
+   *  '_id': will be converted to a Document ID
+   *  'collection': will be used as the document collection.
    *
    * @param string $key
    *   The property key.
@@ -133,7 +153,37 @@ class Document implements DocumentInterface {
    */
   public function set($key, $value) {
 
-    $this->properties[$key] = $value;
+    if ($key == '_id') {
+      $this->setIdentifier($value);
+    }
+    elseif ($key == 'collection') {
+      $this->setCollection($value);
+    }
+    else {
+      $this->properties[$key] = $value;
+    }
+
+    return $this;
+  }
+
+  /**
+   * Link a document to another document or Mongo data item.
+   *
+   * @param string $key
+   *   The property key for this item.
+   * @param string|\MongoID|DocumentInterface $document
+   *   The item to link. Cam be either the ID of the Mongo object, a MongoID, or
+   *   a Document.
+   *
+   * @throws \Vultan\Exception\VultanException
+   *
+   * @return \Vultan\Document\DocumentInterface
+   *   The Document object.
+   */
+  public function link($key, $document) {
+
+    $link = new Link($key, $document);
+    $this->set($key, $link);
 
     return $this;
   }
@@ -143,8 +193,15 @@ class Document implements DocumentInterface {
    *
    * @param string $key
    *   The property to return
+   *
+   * @return string
+   *   Value of the key.
    */
   public function get($key) {
+
+    if ($key == '_id') {
+      return $this->getId();
+    }
 
     if (isset($this->properties[$key])) {
 
@@ -163,6 +220,10 @@ class Document implements DocumentInterface {
    */
   public function remove($key) {
 
+    if ($key == '_id') {
+      unset($this->identifier);
+    }
+
     if (isset($this->properties[$key])) {
       unset($this->properties[$key]);
     }
@@ -176,64 +237,46 @@ class Document implements DocumentInterface {
    * This will either create or update an existing item, using the Mongo upsert
    * functionality. It also sets time created (if new) and time updated.
    *
+   * @param string|int $safe
+   *   Whether to conduct a safe upsert or not.
+   *   - Database::WRITE_SAFE: Safe. Returns status (default)
+   *   - Database::WRITE_UNSAFE: Not safe. Does not return status.
+   *
    * @return array
    *   Result of the Upsert
    */
-  public function save() {
+  public function save($safe = BaseQuery::WRITE_UNSAFE) {
 
     // Load a database.
     $this->invokeDatabaseConnection();
-    $this->getDatabase()->useCollection($this->getCollection());
+    $this->vultan->useCollection($this->collection);
 
-    // Set default created/updated properties.
-    if (!isset($this->properties['time_created'])) {
-      $this->set('time_created', time());
-    }
-    $this->set('time_updated', time());
+    // Set defaults.
+    $this->setDefaultProperties();
 
-    if (isset($this->id)) {
-      $filter = $this->getDatabase()->filterID($this->id);
+    $identifier = $this->getId();
+    if (!empty($identifier)) {
+
+      return $this->vultan->upsert($this, array(), $safe);
     }
     else {
-      $filter = array();
+
+      return $this->vultan->insert($this, $safe);
     }
 
-    return $this->getDatabase()->upsert($filter, $this->getValues());
   }
 
   /**
    * Access a Vultan DB connection.
+   *
+   * @return \Vultan\Document\DocumentInterface
+   *   A Vultan Document.
    */
   public function invokeDatabaseConnection() {
 
-    $database = VultanBuilder::initAndConnect($this->getConfig())->getDatabase();
-    $this->setDatabase($database);
+    $this->vultan = Vultan::init($this->config);
 
     return $this;
-  }
-
-  /**
-   * Set the value for Database.
-   *
-   * @param \Vultan\Vultan\Database $database
-   *   The value to set.
-   */
-  public function setDatabase(Database $database) {
-
-    $this->database = $database;
-  }
-
-
-
-  /**
-   * Return the Database.
-   *
-   * @return Database
-   *   A Database object.
-   */
-  public function getDatabase() {
-
-    return $this->database;
   }
 
   /**
@@ -272,13 +315,94 @@ class Document implements DocumentInterface {
   }
 
   /**
-   * Return an objects properties as an array for inserting into Mongo.
+   * Get the value for Properties.
    *
    * @return array
-   *   An array of properties.
+   *   The value of Properties.
    */
-  public function getValues() {
+  public function getProperties() {
 
-    return $this->properties;
+    $values = $this->properties;
+
+    $this->cleanIdentitifer();
+    if (isset($this->identifier)) {
+      $values['_id'] = $this->getId();
+    }
+
+    return $values;
+  }
+
+  /**
+   * Set the value for Properties.
+   *
+   * @param array $data
+   *   The values to set.
+   *
+   * @return Document
+   *   This class, for chaining.
+   */
+  public function setProperties(array $data) {
+
+    if (!empty($data)) {
+      foreach ($data as $key => $value) {
+
+        $this->set($key, $value);
+      }
+    }
+
+    return $this;
+  }
+
+  /**
+   * Set default properties.
+   */
+  public function setDefaultProperties() {
+
+    // Set default created/updated properties.
+    if (!isset($this->properties['time_created'])) {
+      $this->set('time_created', time());
+    }
+    $this->set('time_updated', time());
+  }
+
+  /**
+   * Clean the identifier key.
+   *
+   * We never want to return an empty identifier.
+   */
+  public function cleanIdentitifer() {
+
+    if (isset($this->identifier) && empty($this->identifier)) {
+      unset($this->identifier);
+    }
+  }
+
+  /**
+   * Given a MongoID, return the ID number.
+   *
+   * @param array $data
+   *   An array containing a MongoID.
+   *
+   * @return string|bool
+   *   A string ID, or FALSE.
+   */
+  static public function extractID($data) {
+
+    $item = NULL;
+    if (is_array($data) && isset($data['_id'])) {
+      $item = (array) $data['_id'];
+    }
+    elseif (is_object($data)) {
+      $item = (array) $data;
+    }
+    else {
+      return FALSE;
+    }
+
+    if (isset($item['$id'])) {
+      return $item['$id'];
+    }
+
+    return FALSE;
   }
 }

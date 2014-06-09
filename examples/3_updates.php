@@ -7,44 +7,45 @@
 // Simply loads the Composer Autoloader.
 require '../vendor/autoload.php';
 
-// Fire up the DB connection and return the DB worker object.
-$config = \Vultan\Config::init();
-$config->setDb('my_database');
-
-$vultan = \Vultan\VultanBuilder::initAndConnect($config);
-
-$database = $vultan->getDatabase();
-
-// Choose a collection to work with.
-$database->useCollection('cars');
+// Using the connect() method without arguments returns a connection to the
+// default MongoDB on localhost.
+$vultan = \Vultan\Vultan::connect()
+  ->useDatabase('cars')
+  ->useCollection('marques');
 
 /*
  * Update the first matched item.
  */
 
-// We now have two records for Silver Shadow's, this will only update one.
+// We now have two records, this will only update one.
 $data = array(
-  'marque' => 'Rolls Royce',
-  'model' => 'Silver Shadow II',
-  'year' => '1976',
+  'name' => 'Rolls Royce',
+  'founded' => '1906',
+  'place' => 'Manchester',
+  'type' => 'manufacturer',
 );
-$filter = array('marque' => 'Rolls Royce');
-$result = $database->update($filter, $data);
+$filter = array('name' => 'Rolls Royce');
+$result = $vultan->update($data, $filter)->execute();
 
 // Message...
 // Print a useful message.
-print '<p>' . $result->successMessage() . '</p>';
+print '<h2>First update result:</h2>';
+print '<p>' . $result->getMessage() . '</p>';
 
 /*
- * Update all items.
+ * Update all matched items.
  */
 
 // There are still two records, however they are now different. We'll do a
 // partial update on both. This will update only the field specified.
-$data = array(
-  'origin' => 'United Kingdom',
+$filter = array(
+  'type' => 'manufacturer',
 );
-$result = $database->updateAll($filter, $data, TRUE);
+$data = array(
+  'founded' => '1900',
+);
+$result = $vultan->updateAll($data, $filter, TRUE)->execute();
 
 // Print a useful message.
-print '<p>' . $result->successMessage() . '</p>';
+print '<h2>Second update result:</h2>';
+print '<p>' . $result->getMessage() . '</p>';

@@ -46,14 +46,6 @@ interface DocumentInterface {
   public function getCollection();
 
   /**
-   * Return the Database.
-   *
-   * @return Database
-   *   A Database object.
-   */
-  public function getDatabase();
-
-  /**
    * Get the value for Id.
    *
    * @return string
@@ -67,7 +59,7 @@ interface DocumentInterface {
    * @return array
    *   An array of properties.
    */
-  public function getValues();
+  public function getProperties();
 
   /**
    * Unset a property.
@@ -119,6 +111,11 @@ interface DocumentInterface {
   public function setCollection($collection_name);
 
   /**
+   * Set default properties.
+   */
+  public function setDefaultProperties();
+
+  /**
    * Set id.
    *
    * This will check whether the provided ID is a MongoId object before setting
@@ -131,4 +128,15 @@ interface DocumentInterface {
    *   The Document object.
    */
   public function setIdentifier($identifier);
+
+  /**
+   * Set the value for Properties.
+   *
+   * @param array $data
+   *   The values to set.
+   *
+   * @return Document
+   *   This class, for chaining.
+   */
+  public function setProperties(array $data);
 }

@@ -1,0 +1,15 @@
+
+Version 0.3
+-----------
+API Additions
+- Added support for Write Concerns
+- Added a DocumentCompatibilityInterface, which allows non-Document objects
+  to declare compatibility with the Vultan Document model
+- If a 'collection' key is set on a Document, this will be used as the
+  Document's collection (but not set when writing data)
+
+API Changes
+- Significant API changes. Please check the examples.
+
+Bugfixes
+- Multiple fixes

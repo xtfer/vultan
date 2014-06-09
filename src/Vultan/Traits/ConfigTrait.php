@@ -18,7 +18,7 @@ trait ConfigTrait {
   /**
    * config
    *
-   * @var \vultan\Config
+   * @var \Vultan\Config
    */
   protected $config;
 

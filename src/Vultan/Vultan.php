@@ -380,12 +380,12 @@ class Vultan {
    * however Vultan provides a separate method for this, so it can be called
    * explicitly when an upsert is a valid operation.
    *
-   * @param array $filter
-   *   An array of keys to match on. e.g. array('marque' => 'Porsche').
    * @param object|array $document
    *   Preferably a Vultan Document, however we also support an array of data,
    *   and other objects public properties will be passed, or objects can
    *   implement the DocumentCompatibilityInterface.
+   * @param array $filter
+   *   An array of keys to match on. e.g. array('marque' => 'Porsche').
    * @param bool $partial
    *   If TRUE, this is a partial update and Vultan will only update the fields
    *   provided in $data. If FALSE, $data completely overwrites the object,
@@ -403,7 +403,7 @@ class Vultan {
    *
    * @see \Mongo\Core\Database::insert()
    */
-  public function update(array $filter, $document, $partial = FALSE, $options = array()) {
+  public function update($document, array $filter = array(), $partial = FALSE, $options = array()) {
 
     $query = Update::create($this->config, $this->collection);
 
@@ -417,12 +417,12 @@ class Vultan {
    *
    * Useful for changing properties across a range of items simultaneously.
    *
-   * @param array $filter
-   *   An array of keys to match on
    * @param object|array $document
    *   Preferably a Vultan Document, however we also support an array of data,
    *   and other objects public properties will be passed, or objects can
    *   implement the DocumentCompatibilityInterface.
+   * @param array $filter
+   *   An array of keys to match on
    * @param bool $partial
    *   If TRUE, this is a partial update and Vultan will only update the fields
    *   provided in $data. If FALSE, $data completely overwrites the object.
@@ -434,7 +434,7 @@ class Vultan {
    *
    * @see \Mongo\Core\Database::insert()
    */
-  public function updateAll(array $filter, $document, $partial = FALSE, $options = array()) {
+  public function updateAll($document, array $filter = array(), $partial = FALSE, $options = array()) {
 
     $query = Update::create($this->config, $this->collection);
 

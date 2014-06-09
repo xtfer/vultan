@@ -25,7 +25,7 @@ $data = array(
   'type' => 'manufacturer',
 );
 $filter = array('name' => 'Rolls Royce');
-$result = $vultan->update($filter, $data)->execute();
+$result = $vultan->update($data, $filter)->execute();
 
 // Message...
 // Print a useful message.
@@ -44,7 +44,7 @@ $filter = array(
 $data = array(
   'founded' => '1900',
 );
-$result = $vultan->updateAll($filter, $data, TRUE)->execute();
+$result = $vultan->updateAll($data, $filter, TRUE)->execute();
 
 // Print a useful message.
 print '<h2>Second update result:</h2>';
